@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(`mongodb://localhost:27017/Chai`, {
+    const conn = await mongoose.connect(MONGODB_URI, {
       bufferCommands: false, // keep this
     }).then((mongoose) => mongoose);
     // console.log(`MongoDB Connected: {conn.connection.host}`);
