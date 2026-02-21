@@ -127,10 +127,10 @@ const Paymentpage = ({ username }) => {
                 </div>
 
                 <div className="flex w-[80vw] gap-8 h-[60vh] relative mx-auto mt-6 mb-6 ">
-                    <ul className="scrollhide bg-[#3b2f30] overflow-x-scroll w-full h-ful pt-6 pl-6 mx-6 ">
-                        <li className="mx-2 relative">Supporters</li>
+                    <ul className="bg-[#3b2f30] overflow-y-scroll w-full h-full pt-6 pl-6 mx-6 rounded-lg border border-white/10">
+                        <li className="mx-2 font-bold mb-4 sticky top-0 bg-[#3b2f30] pb-2 z-10 border-b border-gray-600">Supporters</li>
                         {payments.length === 0 ? (
-                            <li className='text-center mt-10'>No supporters yet. Be the first one!</li>
+                            <li className='text-center mt-10 text-gray-400'>No supporters yet. Be the first one!</li>
                         ) :
 
                             payments.map((p, index) => {
