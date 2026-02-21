@@ -35,7 +35,7 @@ const AboutPage = () => {
             <div className="bg-[#5c4a4a] p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-[#806354]">
                 <h2 className="text-2xl font-bold mb-4 text-[#f2f2ef]">Our Mission</h2>
                 <p className="text-gray-300">
-                    To provide a seamless and transparent platform for creators to receive support from their fans. Whether you're a developer, artist, writer, or musician, Get Me a Chai is here to help you sustain your creative journey.
+                    To provide a seamless and transparent platform for creators to receive support from their fans. Whether you&apos;re a developer, artist, writer, or musician, Get Me a Chai is here to help you sustain your creative journey.
                 </p>
             </div>
             <div className="bg-[#5c4a4a] p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-[#806354]">

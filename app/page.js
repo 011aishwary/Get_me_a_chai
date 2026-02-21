@@ -10,19 +10,19 @@ export default function Home() {
       <HeroSection />
       
       {/* Visual Separators can be added or handled by component backgrounds */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div>
+      {/* <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div> */}
       
       <div id="how-it-works">
         <HowItWorks />
       </div>
 
-      <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div>
+      {/* <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div> */}
 
       <div id="features">
         <Features />
       </div>
 
-       <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div>
+       {/* <div className="h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-20"></div> */}
        
       <div id="testimonials">
         <Testimonials />

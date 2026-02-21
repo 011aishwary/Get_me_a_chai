@@ -11,7 +11,7 @@ const CTA = () => {
   return (
     <section className="relative py-32 flex flex-col items-center justify-center overflow-hidden w-full">
         {/* Animated fluid background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-700 animate-gradient-x w-full h-full opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-700/20 via-purple-700/30 to-indigo-700/20 animate-gradient-x w-full h-full opacity-90"></div>
         <div className="absolute inset-0 bg-black opacity-30 w-full h-full"></div>
 
       <motion.div 
@@ -26,7 +26,7 @@ const CTA = () => {
           Ready to Start Your Journey?
         </h2>
         <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-          Join thousands of creators who are already getting funded. It's free, it's easy, and it's built for you.
+          Join thousands of creators who are already getting funded. It&apos;s free, it&apos;s easy, and it&apos;s built for you.
         </p>
         
         <Link href="/Login">
