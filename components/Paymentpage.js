@@ -79,9 +79,9 @@ const Paymentpage = ({ username }) => {
             "order_id": orderid, //This is a sample Order ID. Pass the id obtained in the response of Step 1
             "callback_url": `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
             "prefill": {
-                "name": "Aishwary Gupta",
-                "email": "aishwaryg01@gmail.com",
-                "contact": "8795157597"
+                "name": "",
+                "email": "",
+                "contact": ""
             },
             "notes": {
                 "address": "Get me a Chai Corporate Office"

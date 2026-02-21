@@ -34,7 +34,7 @@ export const fetchUser = async (username) => {
     let userto = decodeURIComponent(username).replace(/\s+/g, " ")
     // console.log(userto)
     await connectDB();
-    let u = await User.find({ username: "Aishwary Gupta" })
+    let u = await User.find({ username: userto })
     let user = JSON.parse(JSON.stringify(u));
     // console.log(user)
     return user;

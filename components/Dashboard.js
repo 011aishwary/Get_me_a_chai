@@ -16,6 +16,7 @@ const Dashform = () => {
     const [form, setform] = useState({})
     const router = useRouter()
     const getdata =  useCallback(async() => {
+        if (!session?.user?.name) return;
          let u = await fetchUser(session.user.name);
         //  console.log("user deteils")
         //  console.log(u[0])
