@@ -12,6 +12,8 @@
     "@lottiefiles/dotlottie-react": "^0.13.2",
     "@stripe/react-stripe-js": "^4.0.0",
     "@stripe/stripe-js": "^7.9.0",
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
     "mongoose": "^8.13.1",
     "next": "^15.5.2",
     "next-auth": "^4.24.11",
