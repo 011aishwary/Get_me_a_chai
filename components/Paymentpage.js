@@ -142,6 +142,65 @@ const Paymentpage = ({ username }) => {
                 >
                     {payments.length} Supporters • ₹{payments.reduce((acc, curr) => acc + curr.amount, 0)} raised
                 </motion.div>
+
+                {/* About / Story Section */}
+                {currentuser.about && (
+                    <motion.div
+                        initial={{ y: 30, opacity: 0, scale: 0.95 }}
+                        animate={{ y: 0, opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.35, duration: 0.6, type: "spring", bounce: 0.4 }}
+                        whileHover={{ y: -5 }}
+                        className="max-w-3xl mx-auto mt-10 mb-12 relative group"
+                    >
+                        {/* Animated background glow */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        
+                        {/* Decorative quote marks */}
+                        <motion.div 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.8 }}
+                            className="absolute -top-6 -left-4 text-6xl text-indigo-400/30 font-serif select-none z-20"
+                        >
+                            "
+                        </motion.div>
+                        <motion.div 
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.8 }}
+                            className="absolute -bottom-6 -right-4 text-6xl text-purple-400/30 font-serif select-none rotate-180 z-20"
+                        >
+                            "
+                        </motion.div>
+                        
+                        <div className="p-8 sm:p-10 bg-[#1a1516]/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl relative z-10 overflow-hidden">
+                            {/* Subtle inner gradient */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                            
+                            <div className="flex items-center gap-4 mb-6">
+                                <motion.div 
+                                    whileHover={{ rotate: 15, scale: 1.1 }}
+                                    className="p-3 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-xl border border-indigo-500/30 shadow-inner"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3m0 0l3-3m-3 3V8" />
+                                    </svg>
+                                </motion.div>
+                                <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300 tracking-wider uppercase">
+                                    The Mission
+                                </h2>
+                            </div>
+                            
+                            <div className="relative">
+                                <p className="text-gray-300 whitespace-pre-wrap text-left leading-loose text-base sm:text-lg font-light relative z-10">
+                                    {currentuser.about}
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                
             </div>
 
             {/* Main Content Grid */}

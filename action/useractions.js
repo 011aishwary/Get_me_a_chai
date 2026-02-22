@@ -57,5 +57,38 @@ export const updateUser = async (data, oldusername) => {
             return { error: "Username already taken" }
         }
     }
-    await User.updateOne({ email: ndata.email }, ndata)
+    await User.updateOne({ username: oldusername }, ndata)
+}
+
+export const searchUsers = async (query) => {
+    if (!query || query.trim() === "") return [];
+    await connectDB();
+    // Search for users where username matches the query (case-insensitive)
+    let users = await User.find({ 
+        username: { $regex: query, $options: "i" } 
+    }).limit(5).select("username profilepic name");
+    
+    return JSON.parse(JSON.stringify(users));
+}
+
+export const getFeaturedUsers = async () => {
+    await connectDB();
+    // Get 5 random users who have a profile picture
+    let users = await User.aggregate([
+        { $match: { profilepic: { $exists: true, $ne: "" } } },
+        { $sample: { size: 5 } },
+        { $project: { username: 1, profilepic: 1, name: 1, _id: 0 } }
+    ]);
+    
+    // If not enough users with profile pics, just get some random users
+    if (users.length < 5) {
+        const moreUsers = await User.aggregate([
+            { $match: { profilepic: { $exists: false } } },
+            { $sample: { size: 5 - users.length } },
+            { $project: { username: 1, profilepic: 1, name: 1, _id: 0 } }
+        ]);
+        users = [...users, ...moreUsers];
+    }
+    
+    return JSON.parse(JSON.stringify(users));
 }

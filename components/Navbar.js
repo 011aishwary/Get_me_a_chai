@@ -1,6 +1,8 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useRouter } from 'next/navigation';
+import { searchUsers } from '../action/useractions';
 
 import Coffeemug from './Coffeemug'
 import Link from 'next/link'
@@ -11,6 +13,41 @@ const Navbar = () => {
   const { data: session } = useSession()
   const [showDropDown, setshowDropDown] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const router = useRouter()
+  const searchRef = useRef(null)
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.trim().length > 0) {
+        const results = await searchUsers(searchQuery);
+        setSuggestions(results);
+        setShowSuggestions(true);
+      } else {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      fetchSuggestions();
+    }, 300); // Debounce search
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // if(session) {
   //   console.log(session.user)
   //   console.log(session.user.name)    
@@ -32,6 +69,54 @@ const Navbar = () => {
             <Link href="/contact" className="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Contact</Link>
           </div>
           <div className="hidden md:flex items-center space-x-4">
+            
+            {/* Search Bar */}
+            <div className="relative" ref={searchRef}>
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
+                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5"
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 divide-y divide-gray-100 rounded-lg shadow-lg w-64 max-h-60 overflow-y-auto">
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                    {suggestions.map((user) => (
+                      <li key={user._id}>
+                        <button
+                          onClick={() => {
+                            setShowSuggestions(false);
+                            setSearchQuery("");
+                            router.push(`/${user.username}`);
+                          }}
+                          className="flex items-center w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left"
+                        >
+                          {user.profilepic ? (
+                            <img src={user.profilepic} alt={user.username} className="w-8 h-8 rounded-full mr-3 object-cover" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-500 mr-3 flex items-center justify-center">
+                              <span className="text-xs font-bold">{user.username.charAt(0).toUpperCase()}</span>
+                            </div>
+                          )}
+                          <div className="flex flex-col">
+                            <span className="font-semibold">{user.name || user.username}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">@{user.username}</span>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {showSuggestions && searchQuery.trim().length > 0 && suggestions.length === 0 && (
+                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 rounded-lg shadow-lg w-64 p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                  No users found
+                </div>
+              )}
+            </div>
+
             {session && <>
               {/* dropdown content */}
 
@@ -113,6 +198,54 @@ const Navbar = () => {
             </button>
           </div>
           <div className="flex flex-col  p-4 space-y-4">
+            {/* Mobile Search Bar */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
+                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 divide-y divide-gray-100 rounded-lg shadow-lg w-full max-h-60 overflow-y-auto">
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                    {suggestions.map((user) => (
+                      <li key={user._id}>
+                        <button
+                          onClick={() => {
+                            setShowSuggestions(false);
+                            setSearchQuery("");
+                            setShowMobileMenu(false);
+                            router.push(`/${user.username}`);
+                          }}
+                          className="flex items-center w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left"
+                        >
+                          {user.profilepic ? (
+                            <img src={user.profilepic} alt={user.username} className="w-8 h-8 rounded-full mr-3 object-cover" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-500 mr-3 flex items-center justify-center">
+                              <span className="text-xs font-bold">{user.username.charAt(0).toUpperCase()}</span>
+                            </div>
+                          )}
+                          <div className="flex flex-col">
+                            <span className="font-semibold">{user.name || user.username}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">@{user.username}</span>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {showSuggestions && searchQuery.trim().length > 0 && suggestions.length === 0 && (
+                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 rounded-lg shadow-lg w-full p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                  No users found
+                </div>
+              )}
+            </div>
+
             <Link href="/" onClick={() => setShowMobileMenu(false)} className="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Home</Link>
             <Link href="/about" onClick={() => setShowMobileMenu(false)} className="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">About</Link>
             <Link href="/services" onClick={() => setShowMobileMenu(false)} className="block text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Services</Link>

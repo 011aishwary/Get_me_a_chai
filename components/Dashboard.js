@@ -161,6 +161,10 @@ const Dashform = () => {
                         <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
                     </div>
                     <div>
+                        <label htmlFor="about" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About / Your Story</label>
+                        <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tell your fans why you need funding and what your story is..."></textarea>
+                    </div>
+                    <div>
                         <label htmlFor="profilepic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
                         <input type="file" name="profilepic" id="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
