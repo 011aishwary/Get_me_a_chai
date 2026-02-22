@@ -1,183 +1,259 @@
-"use client"
-import React from 'react'
+﻿"use client"
+import React, { useState, useEffect, useCallback } from 'react'
 import Script from 'next/script'
-import { useState, useEffect , useCallback } from 'react'
-import { initiate } from '../action/useractions'
+import { initiate, fetchUser, fetchPayments } from '../action/useractions'
 import { useSession } from 'next-auth/react'
-import { fetchUser } from '../action/useractions'
-import { fetchPayments } from '../action/useractions'
-import { useSearchParams } from 'next/navigation'
-import { ToastContainer, toast } from 'react-toastify';
-
-import { Bounce } from 'react-toastify';
-import { useRouter } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
 import Image from 'next/image'
-import { get } from 'http'
-
-
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Paymentpage = ({ username }) => {
-    // const {data: session} = useSession()
     const router = useRouter()
-
-    const [form, setform] = useState({})
+    const searchParams = useSearchParams()
+    const [form, setform] = useState({ name: "", message: "", amount: "" })
     const [currentuser, setCurrentuser] = useState({})
     const [payments, setpayments] = useState([])
-    const searchParams = useSearchParams();
-
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (searchParams.get('paymentdone') === "true") {
-            toast(' Payment Successful!', {
+            toast.success('Payment Successful!', {
                 position: "bottom-right",
                 autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
                 theme: "dark",
-                color: "green",
                 transition: Bounce,
             });
-
+            // router.push(/\)
         }
-        router.push(`/${username}`)
     }, [router, searchParams, username])
-
 
     const handleChange = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
-
     }
+
     const getpayments = useCallback(async () => {
+        setLoading(true);
         let u = await fetchUser(username);
         let userObj = Array.isArray(u) ? (u[0] || {}) : (u || {});
         setCurrentuser(userObj);
         let p = await fetchPayments(username);
-        // console.log(p);
         setpayments(p);
+        setLoading(false);
     }, [username]);
+
     useEffect(() => {
         getpayments()
-
-
     }, [getpayments])
-    
-    const pay = async (amount) => {
-        // get order id
-        let a = await initiate(amount, username, form)
 
+    const pay = async (amount) => {
+        let a = await initiate(amount, username, form)
         let orderid = a.id
         var options = {
-            "key": currentuser.razorpayId, // Enter the Key ID generated from the Dashboard
-            "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "key": currentuser.razorpayId,
+            "amount": amount,
             "currency": "INR",
             "name": "Get me a Chai",
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
-            "order_id": orderid, //This is a sample Order ID. Pass the id obtained in the response of Step 1
-            "callback_url": `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
-            "prefill": {
-                "name": "",
-                "email": "",
-                "contact": ""
-            },
-            "notes": {
-                "address": "Get me a Chai Corporate Office"
-            },
-            "theme": {
-                "color": "#3399cc"
-            }
-
-
+            "order_id": orderid,
+            "callback_url": `${window.location.origin}/api/razorpay`,
+            "prefill": { "name": "", "email": "", "contact": "" },
+            "notes": { "address": "Get me a Chai Corporate Office" },
+            "theme": { "color": "#3399cc" }
         }
         var rzp1 = new Razorpay(options);
         rzp1.open()
     }
+
     return (
-        <>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                transition={Bounce}
-            />
-            {/* <button id="rzp-button1">Pay with Razorpay</button> */}
+        <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.5 }}
+            className="min-h-screen text-white pb-10"
+        >
+            <ToastContainer />
             <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
-            <div>
-                <div className="w-full h-[40vh] relative">
-                    <Image className='w-full h-[50vh] object-cover ' width={1000} height={500} quality={75} src={currentuser.coverpic || '/default-cover.jpg'} alt={currentuser.coverpic ? "Cover image" : "Default cover"} />
-                    <div className="">
-                        <Image className='h-[100px] w-[100px] rounded-2xl border relative bottom-[13vh] mb-10 left-[47%]' width={45} height={45} src={currentuser.profilepic || '/avatar.png'} alt={currentuser.profilepic ? "Profile picture" : "Default avatar"} />
-                    </div>
+            {/* Cover Image & Profile Section */}
+            <div className="relative w-full">
+                <div className="w-full h-[35vh] md:h-[50vh] relative overflow-hidden">
+                    {loading ? (
+                         <div className="w-full h-full bg-gray-800 animate-pulse"></div>
+                    ) : ( 
+                        <Image 
+                            className='object-cover w-full h-full' 
+                            fill
+                            src={currentuser.coverpic ? currentuser.coverpic : '/avatar.png'} 
+                            alt="Cover Image"
+                            priority
+                            unoptimized={true} // Add this if you face external loader issues
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
                 </div>
-                <div className="flex flex-col justify-center items-center gap-1 text-[#f2f2ef] mt-[14vh] relative">
-                    <div className=""><h1 className='text-3xl  '>{decodeURIComponent(username).replace(/\s+/g, " ")}</h1></div>
-                    <div className="">Raising funds for {decodeURIComponent(username).replace(/\s+/g, " ")}</div>
-                    <div className="">{payments.length} people raised funds . total funds raised  {"₹ "}{payments.reduce((acc, curr) => acc + curr.amount, 0)} total</div>
+                
+                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                    <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                        className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-[#3b2f30] overflow-hidden shadow-2xl bg-black"
+                    >
+                        {loading ? (
+                           <div className="w-full h-full bg-gray-700 animate-pulse"></div>
+                        ) : (
+                        <Image 
+                            className='object-cover'
+                            fill
+                            src={currentuser.profilepic ? currentuser.profilepic : '/avatar.png'} 
+                            alt="Profile"
+                            unoptimized={true}
+                        />
+                        )}
+                    </motion.div>
                 </div>
-
-                <div className="flex w-[80vw] gap-8 h-[60vh] relative mx-auto mt-6 mb-6 ">
-                    <ul className="bg-[#3b2f30] overflow-y-scroll w-full h-full pt-6 pl-6 mx-6 rounded-lg border border-white/10">
-                        <li className="mx-2 font-bold mb-4 sticky top-0 bg-[#3b2f30] pb-2 z-10 border-b border-gray-600">Supporters</li>
-                        {payments.length === 0 ? (
-                            <li className='text-center mt-10 text-gray-400'>No supporters yet. Be the first one!</li>
-                        ) :
-
-                            payments.map((p, index) => {
-                                return (
-                                    <li key={index} className="flex items-center gap-1 pl-4 my-3">
-                                        <Image width={32} height={32} className='w-8 h-8 ' src="/avatar.png" alt="" />
-                                        <span> {p.name} donated <span className='font-bold'>{p.amount}</span> with a message {p.message} </span>
-                                    </li>
-                                )
-                            })
-
-                        }
-
-
-
-
-                    </ul>
-                    <div className="bg-[#3b2f30] w-full h-full">
-                        <form>
-                            <div className="flex flex-col justify-center items-center mt-4 mx-auto ">
-                                <span>Make Payment</span>
-                                <div className="">
-                                    <label htmlFor="name" className="block  mt-1 mb-1 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                    <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border w-[30vw] border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Name" required />
-                                </div>
-                                <div className="">
-                                    <label htmlFor="message" className="block  mt-1 mb-1 text-sm font-medium text-gray-900 dark:text-white">Message</label>
-                                    <input type="text" onChange={handleChange} value={form.message ? form.message : ""} name="message" id="message" className="bg-gray-50 border w-[30vw] border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Message" required />
-                                </div>
-                                <div>
-                                    <label htmlFor="amount" className="block mt-1 mb-1 text-sm font-medium text-gray-900 dark:text-white">Enter Amount</label>
-                                    <input type="number" onChange={handleChange} value={form.amount ? form.amount : ""} name="amount" id="amount" className="bg-gray-50 border w-[30vw] border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Amount" required />
-                                </div>
-                                <div className="flex gap-3 mt-2 justify-evenly w-full">
-                                    <span onClick={() => setform({ ...form, amount: 10 })} className="px-8 py-2 border-0 rounded-2xl bg-blue-950 w-auto ">{"$ 10"}</span>
-                                    <span onClick={() => setform({ ...form, amount: 20 })} className="px-8 py-2 border-0 rounded-2xl bg-blue-950 w-auto ">{"$ 20"}</span>
-                                    <span onClick={() => setform({ ...form, amount: 30 })} className="px-8 py-2 border-0 rounded-2xl bg-blue-950 w-auto ">{"$ 30"}</span>
-                                </div>
-                                <button onClick={() => pay((form.amount) * 100)} type='button' className="text-white mt-2 disabled:bg-[#260542] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" disabled={!form.amount || form.name.length < 3 || form.message.length < 3}>Pay</button>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
             </div>
-        </>
+
+            {/* User Info */}
+            <div className="text-center mt-20 mb-10 px-4">
+                <motion.h1 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className='text-3xl md:text-4xl font-bold mb-2'
+                >
+                    @{decodeURIComponent(username).replace(/\s+/g, " ")}
+                </motion.h1>
+                <motion.p 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-gray-400 text-sm md:text-base mb-2"
+                >
+                    Raising funds for {decodeURIComponent(username).replace(/\s+/g, " ")}
+                </motion.p>
+                <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-indigo-400 font-semibold"
+                >
+                    {payments.length} Supporters • ₹{payments.reduce((acc, curr) => acc + curr.amount, 0)} raised
+                </motion.div>
+            </div>
+
+            {/* Main Content Grid */}
+            <div className="container mx-auto px-4 max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* Supporters List */}
+                <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="bg-[#3b2f30]/50 backdrop-blur-md border border-white/10 rounded-xl p-5 h-[400px] flex flex-col"
+                >
+                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 bg-transparent sticky top-0">Top Supporters</h2>
+                    <ul className="overflow-y-auto flex-1 space-y-3 pr-2 custom-scrollbar">
+                        {payments.length === 0 ? (
+                            <li className='text-center text-gray-500 mt-8 italic text-sm'>No supporters yet. Be the first! 🚀</li>
+                        ) : (
+                            payments.map((p, index) => (
+                                <motion.li 
+                                    key={index}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    className="flex items-start gap-3 p-2.5 bg-black/20 rounded-lg hover:bg-black/40 transition-colors"
+                                >
+                                    <div className="shrink-0 p-1 bg-indigo-500/20 rounded-full">
+                                        <Image width={30} height={30} src="/avatar.png" alt="supporter" className="rounded-full" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold truncate hover:text-indigo-400 transition-colors">
+                                            {p.name} <span className="text-gray-400 text-xs font-normal">donated</span> <span className="text-green-400 font-bold">₹{p.amount}</span>
+                                        </p>
+                                        <p className="text-xs text-gray-400 break-words mt-1 leading-tight">"{p.message}"</p>
+                                    </div>
+                                </motion.li>
+                            ))
+                        )}
+                    </ul>
+                </motion.div>
+
+                {/* Date/Payment Form */}
+                <motion.div 
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="bg-[#3b2f30]/50 backdrop-blur-md border border-white/10 rounded-xl p-5 h-fit sticky top-24"
+                >
+                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Support {decodeURIComponent(username).replace(/\s+/g, " ")}</h2>
+                    <form className="space-y-3">
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                            <input 
+                                type="text" 
+                                name="name" 
+                                value={form.name} 
+                                onChange={handleChange}
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600" 
+                                placeholder="Enter your name" 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                            <textarea 
+                                name="message" 
+                                value={form.message} 
+                                onChange={handleChange}
+                                rows="3"
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600 resize-none" 
+                                placeholder="Say something nice..." 
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-1">Amount (₹)</label>
+                            <input 
+                                type="number" 
+                                name="amount" 
+                                value={form.amount} 
+                                onChange={handleChange}
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600" 
+                                placeholder="Amount" 
+                            />
+                        </div>
+
+                        <div className="flex gap-3 pt-2">
+                            {[10, 20, 50].map((amt) => (
+                                <motion.button
+                                    key={amt}
+                                    type="button"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setform({ ...form, amount: amt })} 
+                                    className="flex-1 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 rounded-lg text-indigo-300 font-medium transition-colors"
+                                >
+                                    ₹{amt}
+                                </motion.button>
+                            ))}
+                        </div>
+
+                        <motion.button 
+                            type="button"
+                            onClick={() => pay((form.amount) * 100)} 
+                            disabled={!form.amount || form.name.length < 3 || form.message.length < 3}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="w-full py-3.5 mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                            Pay ₹{form.amount || '0'}
+                        </motion.button>
+                    </form>
+                </motion.div>
+            </div>
+        </motion.div>
     )
 }
 
