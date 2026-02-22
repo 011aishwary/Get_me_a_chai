@@ -1,3 +1,4 @@
+import { profile } from "console";
 import mongoose from "mongoose";
 
 const {Schema , model} = mongoose;
@@ -7,6 +8,8 @@ const UserSchema = new Schema({
     name:{type : String , },
     username:{type : String , required: true},
     profilepic:{type : String , },
+    profilepicId:{type : String , },
+    coverpicId:{type : String , },
     coverpic:{type : String , },
     razorpayId:{type : String , },
     razorpaySecret:{type : String , },

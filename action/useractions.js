@@ -8,7 +8,7 @@ import connectDB from "../db/connectDB"
 
 export const initiate = async (amount, to_user, form) => {
     await connectDB();
-    let v = await User.findOne({ username: "Aishwary Gupta" });
+    let v = await User.findOne({ username: to_user });
     // console.log(v)
     
     var instance = new Razorpay({
@@ -50,7 +50,7 @@ export const fetchPayments = async (username) => {
 export const updateUser = async (data, oldusername) => {
     await connectDB();
     let ndata = Object.fromEntries(data);
-    // console.log(ndata)
+    console.log(ndata)
     if (ndata.username !== oldusername) {
         let u = await User.findOne({ username: oldusername })
         if (u) {

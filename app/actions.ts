@@ -7,21 +7,28 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-export async function uploadImage(file: File) {
+export async function uploadImage(file: File , oldPublicId?: string) {
+    // 1. Delete the old image if a Public ID exists
+    console.log("Old Public ID:", oldPublicId);
+  if (oldPublicId) {
+    await cloudinary.uploader.destroy(oldPublicId);
+  }
   
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      { tags: ["nextjs-upload"] },
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: "user_uploads" },
       (error, result) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(result?.secure_url); // This is your image URL
+        if (error) return reject(error);
+        // Return both URL and Public ID
+        resolve({
+          url: result?.secure_url,
+          publicId: result?.public_id,
+        });
       }
-    ).end(buffer);
+    );
+    uploadStream.end(buffer);
   });
 }

@@ -15,6 +15,7 @@ const Dashform = () => {
     const { data: session, update } = useSession()
     const [form, setform] = useState({})
     const [loading, setLoading] = useState(false)
+    const [publicId, setPublicId] = useState(null);
     const [initialized, setInitialized] = useState(false) // New line
     const router = useRouter()
 
@@ -39,16 +40,16 @@ const Dashform = () => {
         setform({ ...form, [e.target.name]: e.target.value })
     }
 
-    const handleFileUpload = async (file) => {
+    const handleFileUpload = async (file, oldPublicId) => {
         // const file = e.target.files[0];
         if (!file) return;
 
 
         setLoading(true);
         try {
-            const url = await uploadImage(file);
+            const { url, publicId } = await uploadImage(file, oldPublicId);
             console.log("Uploaded image URL:", url);
-            return url;
+            return { url, publicId };
             // setform({ ...form, [file.name]: url });
 
 
@@ -62,11 +63,21 @@ const Dashform = () => {
     const handleSubmit = async (e) => {
         let profilePicFile = e.get("profilepic");
         let coverPicFile = e.get("coverpic");
+        console.log(profilePicFile, coverPicFile)
+        
 
             // Upload profile picture if it's a file
             if (profilePicFile && profilePicFile.size > 0 && profilePicFile.name) {
-                const url = await handleFileUpload(profilePicFile);
+                let currentPublicId = undefined;
+                // Use the ID directly from the database if it exists
+                if(form.profilepicId){
+                    currentPublicId = form.profilepicId;
+                } 
+                console.log("publicId:", currentPublicId )
+                const { url, publicId } = await handleFileUpload(profilePicFile , currentPublicId);
                 e.set("profilepic", url);
+                if (publicId) e.set("profilepicId", publicId); // Update profilepicId in DB
+                
             }
             // else remove it if it's not a new file, so we don't accidentally send a file object or empty string
             else if (!profilePicFile || profilePicFile.size === 0) {
@@ -75,18 +86,31 @@ const Dashform = () => {
                  if (form.profilepic) {
                      e.set("profilepic", form.profilepic);
                  }
+                 if (form.profilepicId) {
+                     e.set("profilepicId", form.profilepicId);
+                 }
             }
 
 
             // Upload cover picture if it's a file
             if (coverPicFile && coverPicFile.size > 0 && coverPicFile.name) {
-                const url = await handleFileUpload(coverPicFile);
+                let currentPublicId = undefined;
+                // Use the ID directly from the database if it exists
+                if(form.coverpicId){
+                    currentPublicId = form.coverpicId;
+                } 
+                console.log("publicId:", currentPublicId)
+                const { url, publicId } = await handleFileUpload(coverPicFile, currentPublicId);
                 e.set("coverpic", url);
+                if (publicId) e.set("coverpicId", publicId); // Update coverpicId in DB
             }
             else if (!coverPicFile || coverPicFile.size === 0) {
                  e.delete("coverpic");
                  if (form.coverpic) {
                      e.set("coverpic", form.coverpic);
+                 }
+                 if (form.coverpicId) {
+                     e.set("coverpicId", form.coverpicId);
                  }
             }
 
