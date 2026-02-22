@@ -122,7 +122,7 @@ const Paymentpage = ({ username }) => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className='text-3xl md:text-4xl font-bold mb-2'
+                    className='text-3xl text-amber-950 text-center md:text-4xl font-bold mb-2'
                 >
                     @{decodeURIComponent(username).replace(/\s+/g, " ")}
                 </motion.h1>
@@ -130,7 +130,7 @@ const Paymentpage = ({ username }) => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-gray-400 text-sm md:text-base mb-2"
+                    className="text-gray-800 text-sm md:text-base mb-2"
                 >
                     Raising funds for {decodeURIComponent(username).replace(/\s+/g, " ")}
                 </motion.p>
@@ -138,7 +138,7 @@ const Paymentpage = ({ username }) => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-indigo-400 font-semibold"
+                    className="text-amber-900 font-semibold"
                 >
                     {payments.length} Supporters • ₹{payments.reduce((acc, curr) => acc + curr.amount, 0)} raised
                 </motion.div>
@@ -152,12 +152,12 @@ const Paymentpage = ({ username }) => {
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="bg-[#3b2f30]/50 backdrop-blur-md border border-white/10 rounded-xl p-5 h-[400px] flex flex-col"
+                    className="bg-[#3b2f30]/90 backdrop-blur-md border border-white/10 rounded-xl p-5 h-[400px] flex flex-col"
                 >
-                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 bg-transparent sticky top-0">Top Supporters</h2>
+                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2 bg-transparent text-[#f0f0f0] sticky top-0">Top Supporters</h2>
                     <ul className="overflow-y-auto flex-1 space-y-3 pr-2 custom-scrollbar">
                         {payments.length === 0 ? (
-                            <li className='text-center text-gray-500 mt-8 italic text-sm'>No supporters yet. Be the first! 🚀</li>
+                            <li className='text-center text-gray-900 mt-8 italic text-md'>No supporters yet. Be the first! 🚀</li>
                         ) : (
                             payments.map((p, index) => (
                                 <motion.li 
@@ -170,9 +170,9 @@ const Paymentpage = ({ username }) => {
                                     <div className="shrink-0 p-1 bg-indigo-500/20 rounded-full">
                                         <Image width={30} height={30} src="/avatar.png" alt="supporter" className="rounded-full" />
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-semibold truncate hover:text-indigo-400 transition-colors">
-                                            {p.name} <span className="text-gray-400 text-xs font-normal">donated</span> <span className="text-green-400 font-bold">₹{p.amount}</span>
+                                    <div className="flex-1 min-w-0 text-[#f0f0f0]">
+                                        <p className="text-sm font-light truncate hover:text-indigo-400 transition-colors">
+                                            {p.name} <span className="text-gray-400 text-xs font-light">donated</span> <span className="text-green-400 font-bold">₹{p.amount}</span>
                                         </p>
                                         <p className="text-xs text-gray-400 break-words mt-1 leading-tight">"{p.message}"</p>
                                     </div>
@@ -187,40 +187,40 @@ const Paymentpage = ({ username }) => {
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="bg-[#3b2f30]/50 backdrop-blur-md border border-white/10 rounded-xl p-5 h-fit sticky top-24"
+                    className="bg-[#3b2f30]/90 backdrop-blur-md border border-white/10 rounded-xl p-5 h-fit sticky top-24"
                 >
-                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Support {decodeURIComponent(username).replace(/\s+/g, " ")}</h2>
+                    <h2 className="text-lg font-bold mb-4 border-b border-gray-700 text-[#f0f0f0] pb-2">Support {decodeURIComponent(username).replace(/\s+/g, " ")}</h2>
                     <form className="space-y-3">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                            <label htmlFor="name" className="block text-sm font-medium text-[#f0f0f0] mb-1">Name</label>
                             <input 
                                 type="text" 
                                 name="name" 
                                 value={form.name} 
                                 onChange={handleChange}
-                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600" 
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-[#f0f0f0] focus:ring-2 focus:ring-amber-950 focus:border-transparent outline-none transition-all placeholder-gray-600" 
                                 placeholder="Enter your name" 
                             />
                         </div>
                         <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                            <label htmlFor="message" className="block text-sm font-medium text-[#f0f0f0] mb-1">Message</label>
                             <textarea 
                                 name="message" 
                                 value={form.message} 
                                 onChange={handleChange}
                                 rows="3"
-                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600 resize-none" 
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-[#f0f0f0] focus:ring-1 focus:ring-amber-950 focus:border-transparent outline-none transition-all placeholder-gray-600 resize-none" 
                                 placeholder="Say something nice..." 
                             />
                         </div>
                         <div>
-                            <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-1">Amount (₹)</label>
+                            <label htmlFor="amount" className="block text-sm font-medium text-[#f0f0f0] mb-1">Amount (₹)</label>
                             <input 
                                 type="number" 
                                 name="amount" 
                                 value={form.amount} 
                                 onChange={handleChange}
-                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600" 
+                                className="w-full bg-black/20 border border-gray-600 rounded-lg p-3 text-[#f0f0f0] focus:ring-1 focus:ring-amber-950 focus:border-transparent outline-none transition-all placeholder-gray-600" 
                                 placeholder="Amount" 
                             />
                         </div>

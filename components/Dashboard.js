@@ -15,22 +15,25 @@ const Dashform = () => {
     const { data: session, update } = useSession()
     const [form, setform] = useState({})
     const [loading, setLoading] = useState(false)
+    const [initialized, setInitialized] = useState(false) // New line
     const router = useRouter()
+
     const getdata = useCallback(async () => {
         if (!session?.user?.name) return;
         let u = await fetchUser(session.user.name);
-        //  console.log("user deteils")
-        //  console.log(u[0])
         setform(u[0])
+        setInitialized(true); // Mark as initialized
     }, [session]);
 
-
+    // Only run once on mount, or if session changes AND not yet initialized
     useEffect(() => {
-        getdata()
         if (!session) {
             router.push('/Login')
         }
-    }, [router, session, getdata])
+        if (session && !initialized) { // Only fetch if we haven't already
+            getdata()
+        }
+    }, [router, session, getdata, initialized])
 
     const handleChange = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
@@ -47,7 +50,7 @@ const Dashform = () => {
             console.log("Uploaded image URL:", url);
             return url;
             // setform({ ...form, [file.name]: url });
-            
+
 
         } catch (error) {
             console.error("Upload failed:", error);
@@ -58,21 +61,35 @@ const Dashform = () => {
     };
     const handleSubmit = async (e) => {
         let profilePicFile = e.get("profilepic");
-        console.log(profilePicFile)
         let coverPicFile = e.get("coverpic");
 
-        // Upload profile picture if it's a file
-        if (profilePicFile && profilePicFile.size > 0 && profilePicFile.name) {
-             const url = await handleFileUpload(profilePicFile);
-             console.log("Profile picture URL:", url);
-             e.set("profilepic", url);
-        }
+            // Upload profile picture if it's a file
+            if (profilePicFile && profilePicFile.size > 0 && profilePicFile.name) {
+                const url = await handleFileUpload(profilePicFile);
+                e.set("profilepic", url);
+            }
+            // else remove it if it's not a new file, so we don't accidentally send a file object or empty string
+            else if (!profilePicFile || profilePicFile.size === 0) {
+                 e.delete("profilepic");
+                 // If you need to preserve existing URL:
+                 if (form.profilepic) {
+                     e.set("profilepic", form.profilepic);
+                 }
+            }
 
-        // Upload cover picture if it's a file
-        if (coverPicFile && coverPicFile.size > 0 && coverPicFile.name) {
-             const url = await handleFileUpload(coverPicFile);
-             e.set("coverpic", url);
-        }
+
+            // Upload cover picture if it's a file
+            if (coverPicFile && coverPicFile.size > 0 && coverPicFile.name) {
+                const url = await handleFileUpload(coverPicFile);
+                e.set("coverpic", url);
+            }
+            else if (!coverPicFile || coverPicFile.size === 0) {
+                 e.delete("coverpic");
+                 if (form.coverpic) {
+                     e.set("coverpic", form.coverpic);
+                 }
+            }
+
 
         update()
         let a = await updateUser(e, session.user.name)
@@ -121,11 +138,11 @@ const Dashform = () => {
                     </div>
                     <div>
                         <label htmlFor="profilepic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
-                        <input type="file"  name="profilepic" id="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                        <input type="file" name="profilepic" id="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div>
                         <label htmlFor="coverpic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
-                        <input type="file"  name="coverpic" id="coverpic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                        <input type="file" name="coverpic" id="coverpic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
                     <div>
                         <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RazorPay ID</label>
