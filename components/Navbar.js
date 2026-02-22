@@ -19,13 +19,13 @@ const Navbar = () => {
   return (
     <nav className='relative'>
       <header className="bg-white  dark:bg-[#3b2f30] shadow-lg relative">
-        <nav className="container mx-auto px-8 py-2 flex justify-between items-center">
+        <nav className="container mx-auto px-8 py-2 h-16 flex justify-between items-center">
           <div className="flex items-center space-x-2">
               <Coffeemug />
             <Link href="/" className="text-xl text-center font-bold text-indigo-800 dark:text-white transition-colors duration-300">Get Me a Chai
             </Link>
           </div>
-          <div className="hidden md:flex space-x-6 text-2xl font-medium">
+          <div className="hidden md:flex space-x-6 text-xl font-medium">
             <Link href="/" className="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Home</Link>
             <Link href="/about" className="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">About</Link>
             <Link href="/services" className="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-800 dark:hover:text-white transition-colors duration-300">Services</Link>
