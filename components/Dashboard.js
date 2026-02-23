@@ -17,7 +17,19 @@ const Dashform = () => {
     const [loading, setLoading] = useState(false)
     const [publicId, setPublicId] = useState(null);
     const [initialized, setInitialized] = useState(false) // New line
+    const [profilePicName, setProfilePicName] = useState("");
+    const [coverPicName, setCoverPicName] = useState("");
+    const [showRazorpayId, setShowRazorpayId] = useState(false);
+    const [showRazorpaySecret, setShowRazorpaySecret] = useState(false);
     const router = useRouter()
+
+    const handleFileChange = (e) => {
+        if (e.target.name === 'profilepic') {
+            setProfilePicName(e.target.files[0]?.name || "");
+        } else if (e.target.name === 'coverpic') {
+            setCoverPicName(e.target.files[0]?.name || "");
+        }
+    }
 
     const getdata = useCallback(async () => {
         if (!session?.user?.name) return;
@@ -150,35 +162,59 @@ const Dashform = () => {
                 <div className="flex flex-col justify-center items-center mb-4 mx-auto w-[90vw] md:w-[90vw]  ">
                     <div className="">
                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required />
+                        <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
                     </div>
                     <div className="">
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
-                        <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required />
+                        <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@gmail.com" required />
                     </div>
                     <div>
                         <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="01John" required />
                     </div>
                     <div>
                         <label htmlFor="about" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About / Your Story</label>
                         <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tell your fans why you need funding and what your story is..."></textarea>
                     </div>
                     <div>
-                        <label htmlFor="profilepic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
-                        <input type="file" name="profilepic" id="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
+                        <label htmlFor="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">
+                            {profilePicName ? profilePicName : "Choose File"}
+                        </label>
+                        <input type="file" name="profilepic" id="profilepic" className="hidden" onChange={handleFileChange} />
                     </div>
                     <div>
-                        <label htmlFor="coverpic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
-                        <input type="file" name="coverpic" id="coverpic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
+                        <label htmlFor="coverpic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">
+                            {coverPicName ? coverPicName : "Choose File"}
+                        </label>
+                        <input type="file" name="coverpic" id="coverpic" className="hidden" onChange={handleFileChange} />
                     </div>
                     <div>
                         <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RazorPay ID</label>
-                        <input type="text" onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Razorpay Id" required />
+                        <div className="relative w-[90vw] md:w-[60vw]">
+                            <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 w-full text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Razorpay Id" required />
+                            <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200">
+                                {showRazorpayId ? (
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                                ) : (
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                )}
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RazorPay Secret</label>
-                        <input type="text" onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
+                        <div className="relative w-[90vw] md:w-[60vw]">
+                            <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" className="bg-gray-50 border border-gray-300 text-gray-900 w-full text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Razorpay Secret" required />
+                            <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200">
+                                {showRazorpaySecret ? (
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                                ) : (
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="flex items-start mb-6">
