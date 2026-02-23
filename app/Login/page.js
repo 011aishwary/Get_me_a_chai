@@ -1,98 +1,101 @@
 "use client"
-import React from 'react';
-import { useSession, signIn, signOut } from "next-auth/react"
-import { useState ,useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSession, signIn } from "next-auth/react"
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import Coffeemug from '../../components/Coffeemug';
 
 const Login = () => {
-    const [inputValue, setInputValue] = useState('');
     const { data: session } = useSession()
     const router = useRouter()
+    
     useEffect(() => {
       if(session) {
-        // form.registerField()
         router.push('/dashboard')
-    }
-    }, [session , router])
-    
-    
-    
+      }
+    }, [session, router])
 
-    const handleChange = (event) => {
-            setInputValue(event.target.value);
-    };
     return (
-    <div id="login-popup" tabIndex="-1"
-
-        className="bg-black/50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 h-full items-center justify-center flex">
-        <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-
-            <div className="relative bg-white rounded-lg shadow">
-                <button type="button"
-                    className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center popup-close"><svg
-                        aria-hidden="true" className="w-5 h-5" fill="#c6c7c7" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clipRule="evenodd"></path>
-                    </svg>
-                    <span className="sr-only">Close popup</span>
-                </button>
-
-                <div className="p-5">
-                    <h3 className="text-2xl mb-0.5 font-medium"></h3>
-                    <p className="mb-4 text-sm font-normal text-gray-800"></p>
-
-                    <div className="text-center">
-                        <p className="mb-3 text-2xl font-semibold leading-5 text-slate-900">
-                            Login to your account
-                        </p>
-                        <p className="mt-2 text-sm leading-4 text-slate-600">
-                            You must be logged in to perform this action.
-                        </p>
-                    </div>
-
-                    <div className="mt-7 flex flex-col gap-2">
-
-                        <button onClick={()=>{signIn("github")}}
-                            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><Image
-                                src="https://www.svgrepo.com/show/512317/github-142.svg" width={18} height={18} alt="GitHub"
-                                className="h-[18px] w-[18px] " />
-                                Continue with GitHub
-                        </button>
-
-                       
-                        <button onClick={()=>{signIn("google")}}
-                            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><Image
-                                src="https://www.svgrepo.com/show/475656/google-color.svg" width={18} height={18} alt="Google"
-                                className="h-[18px] w-[18px] "/>Continue with
-                                Google
-                        </button>
-
-
-                        
-                        
-                    </div>
-
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-amber-950 to-amber-900 p-4">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden p-8"
+            >
+                <div className="text-center mb-8">
                     
-
-
-                    
-
-                    {/* <div className="mt-6 text-center text-sm text-slate-600">
-                        Don't have an account?
-                        <a href="/signup" className="font-medium text-[#4285f4]">Sign up</a>
-                    </div> */}
+                         <div className="w-full h-full flex items-center justify-center lg:hover:rotate-15 lg:hover:scale-130 lg:hover:-translate-y-4 lg:hover:translate-x-3 transition-all ease-in-out duration-500 scale-120"><Coffeemug loop={false}/></div>
+                    <motion.h2 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="text-3xl font-bold text-white mb-2"
+                    >
+                        Welcome Back
+                    </motion.h2>
+                    <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-gray-300"
+                    >
+                        Login to support your favorite creators
+                    </motion.p>
                 </div>
 
-            </div>
+                <div className="flex flex-col gap-4">
+                    <motion.button 
+                        whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                        whileTap={{ scale: 0.98 }}
+                        initial={{ x: -50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        onClick={()=>{signIn("github")}}
+                        className="group flex items-center justify-center gap-3 bg-white text-gray-900 font-semibold py-3 px-6 rounded-xl shadow-md transition-all duration-300"
+                    >
+                        <Image
+                            src="https://www.svgrepo.com/show/512317/github-142.svg" 
+                            width={24} 
+                            height={24} 
+                            alt="GitHub"
+                            className="w-6 h-6 transition-transform group-hover:rotate-12" 
+                        />
+                        <span>Continue with GitHub</span>
+                    </motion.button>
+
+                    <motion.button 
+                        whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                        whileTap={{ scale: 0.98 }}
+                        initial={{ x: 50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                        onClick={()=>{signIn("google")}}
+                        className="group flex items-center justify-center gap-3 bg-white text-gray-900 font-semibold py-3 px-6 rounded-xl shadow-md transition-all duration-300"
+                    >
+                        <Image
+                            src="https://www.svgrepo.com/show/475656/google-color.svg" 
+                            width={24} 
+                            height={24} 
+                            alt="Google"
+                            className="w-6 h-6 transition-transform group-hover:rotate-12"
+                        />
+                        <span>Continue with Google</span>
+                    </motion.button>
+                </div>
+
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="mt-8 text-center text-sm text-gray-400"
+                >
+                    By logging in, you agree to our terms & conditions
+                </motion.div>
+            </motion.div>
         </div>
-    </div>
-
-        
-
-
-)}
+    )
+}
 
 export default Login

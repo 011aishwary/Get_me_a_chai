@@ -161,40 +161,40 @@ const Dashform = () => {
             <form action={handleSubmit}>
                 <div className="flex flex-col justify-center items-center mb-4 mx-auto w-[90vw] md:w-[90vw]  ">
                     <div className="">
-                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                        <label htmlFor="name" className="block mb-2 text-sm font-medium  text-white">Name</label>
+                        <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5   placeholder-gray-400 " placeholder="John" required />
                     </div>
                     <div className="">
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
-                        <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@gmail.com" required />
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium  text-white">Email address</label>
+                        <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block  p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="john.doe@gmail.com" required />
                     </div>
                     <div>
-                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="01John" required />
+                        <label htmlFor="username" className="block mb-2 text-sm font-medium  text-white">Username</label>
+                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block  p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="01John" required />
                     </div>
                     <div>
-                        <label htmlFor="about" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About / Your Story</label>
-                        <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tell your fans why you need funding and what your story is..."></textarea>
+                        <label htmlFor="about" className="block mb-2 text-sm font-medium  text-white">About / Your Story</label>
+                        <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Tell your fans why you need funding and what your story is..."></textarea>
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
-                        <label htmlFor="profilepic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">
+                        <label className="block mb-2 text-sm font-medium  text-white">Profile Picture</label>
+                        <label htmlFor="profilepic" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  cursor-pointer">
                             {profilePicName ? profilePicName : "Choose File"}
                         </label>
                         <input type="file" name="profilepic" id="profilepic" className="hidden" onChange={handleFileChange} />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
-                        <label htmlFor="coverpic" className="bg-gray-50 border border-gray-300 text-gray-900 w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer">
+                        <label className="block mb-2 text-sm font-medium  text-white">Cover Picture</label>
+                        <label htmlFor="coverpic" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
                             {coverPicName ? coverPicName : "Choose File"}
                         </label>
                         <input type="file" name="coverpic" id="coverpic" className="hidden" onChange={handleFileChange} />
                     </div>
                     <div>
-                        <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RazorPay ID</label>
+                        <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium  text-white">RazorPay ID</label>
                         <div className="relative w-[90vw] md:w-[60vw]">
-                            <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 w-full text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Razorpay Id" required />
-                            <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200">
+                            <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" className="bg-gray-50 border   w-full text-sm rounded-lg  block p-2.5 pr-10  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Razorpay Id" required />
+                            <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 transition-colors duration-200">
                                 {showRazorpayId ? (
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                                 ) : (
@@ -204,10 +204,10 @@ const Dashform = () => {
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RazorPay Secret</label>
+                        <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium  text-white">RazorPay Secret</label>
                         <div className="relative w-[90vw] md:w-[60vw]">
-                            <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" className="bg-gray-50 border border-gray-300 text-gray-900 w-full text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Razorpay Secret" required />
-                            <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200">
+                            <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" className="bg-gray-50 border   w-full text-sm rounded-lg  block p-2.5 pr-10  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Razorpay Secret" required />
+                            <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3  hover:text-gray-200 transition-colors duration-200">
                                 {showRazorpaySecret ? (
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                                 ) : (
@@ -217,13 +217,13 @@ const Dashform = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-start mb-6">
+                    <div className="flex items-start mb-6 mt-2">
                         <div className="flex items-center h-5">
-                            <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required />
+                            <input id="remember" type="checkbox" value="" className="w-4 h-4 border  rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300  border-gray-600  ring-offset-gray-800" required />
                         </div>
-                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
+                        <label htmlFor="remember" className="ms-2 text-sm font-medium  text-gray-300">I agree with the <a href="#" className="text-blue-600 hover:underline ">terms and conditions</a>.</label>
                     </div>
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  focus:ring-blue-800">Submit</button>
                 </div>
             </form>
 
