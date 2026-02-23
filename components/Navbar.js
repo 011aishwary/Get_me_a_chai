@@ -87,7 +87,7 @@ const Navbar = () => {
             {/* Search Bar */}
             <div className="relative" ref={searchRef}>
               {/* Desktop Search (lg and up) */}
-              <div className="hidden lg:block relative">
+              <div className="hidden lg:block  relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -99,7 +99,7 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
-                  className="bg-gray-950 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 pl-10 p-2.5"
+                  className="bg-gray-950 text-[#f0f0f0] text-sm rounded-lg focus:ring-amber-950 focus:border-amber-950 block w-48 pl-10 p-2.5"
                 />
               </div>
 
