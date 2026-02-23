@@ -54,13 +54,13 @@ const ServicesPage = () => {
   };
 
   return (
-    <div className="min-h-screen text-white py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-950 text-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-center">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-5xl font-extrabold text-[#f2f2ef] mb-4 tracking-tight"
+          className="text-5xl font-extrabold text-white mb-4 tracking-tight"
         >
           Our Services
         </motion.h1>
@@ -68,7 +68,7 @@ const ServicesPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="text-xl text-gray-300 max-w-2xl mx-auto mb-16"
+          className="text-xl text-neutral-300 max-w-2xl mx-auto mb-16"
         >
           Everything you need to turn your passion into a sustainable career.
         </motion.p>
@@ -79,18 +79,18 @@ const ServicesPage = () => {
           animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {services.map((service, index) => (
+            {services.map((service, index) => (
             <motion.div
               key={index}
               variants={cardVariants}
               whileHover={{ scale: 1.05, rotate: 1 }}
-              className="bg-[#5c4a4a] p-8 rounded-2xl shadow-lg border border-[#806354] hover:shadow-2xl hover:border-indigo-500 transition-all duration-300 flex flex-col items-center text-center group"
+              className="bg-neutral-900 p-8 rounded-2xl shadow-lg border border-neutral-800 hover:shadow-2xl hover:border-amber-500 transition-all duration-300 flex flex-col items-center text-center group"
             >
-              <div className="mb-6 p-4 bg-[#3b2f30] rounded-full group-hover:bg-gray-700 transition-colors duration-300">
+              <div className="mb-6 p-4 bg-neutral-800 rounded-full group-hover:bg-neutral-700 transition-colors duration-300 border border-neutral-700">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-bold text-[#f2f2ef] mb-3">{service.title}</h3>
-              <p className="text-gray-300">{service.description}</p>
+              <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
+              <p className="text-neutral-400">{service.description}</p>
             </motion.div>
           ))}
         </motion.div>

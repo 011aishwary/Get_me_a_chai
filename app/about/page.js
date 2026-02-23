@@ -15,7 +15,7 @@ const AboutPage = () => {
   };
 
   return (
-    <div className="min-h-screen text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-950 text-white py-12 px-4 sm:px-6 lg:px-8">
       <motion.div 
         className="max-w-4xl mx-auto space-y-12"
         variants={containerVariants}
@@ -23,24 +23,24 @@ const AboutPage = () => {
         animate="visible"
       >
         <motion.section variants={itemVariants} className="text-center space-y-6">
-          <h1 className="text-5xl font-extrabold tracking-tight text-[#f2f2ef] mb-4">
-            About <span className="text-indigo-600">Get Me a Chai</span>
+          <h1 className="text-5xl font-extrabold tracking-tight text-white mb-4">
+            About <span className="text-amber-500">Get Me a Chai</span>
           </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-neutral-300 max-w-2xl mx-auto leading-relaxed">
             Empowering creators to fuel their passion through the support of their community. We believe in the power of small contributions making a big impact.
           </p>
         </motion.section>
 
         <motion.div variants={itemVariants} className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-[#5c4a4a] p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-[#806354]">
-                <h2 className="text-2xl font-bold mb-4 text-[#f2f2ef]">Our Mission</h2>
-                <p className="text-gray-300">
+            <div className="bg-neutral-900 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-neutral-800">
+                <h2 className="text-2xl font-bold mb-4 text-amber-500">Our Mission</h2>
+                <p className="text-neutral-300">
                     To provide a seamless and transparent platform for creators to receive support from their fans. Whether you&apos;re a developer, artist, writer, or musician, Get Me a Chai is here to help you sustain your creative journey.
                 </p>
             </div>
-            <div className="bg-[#5c4a4a] p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-[#806354]">
-                <h2 className="text-2xl font-bold mb-4 text-[#f2f2ef]">Why Choose Us?</h2>
-                <ul className="list-disc list-inside text-gray-300 space-y-2">
+            <div className="bg-neutral-900 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-neutral-800">
+                <h2 className="text-2xl font-bold mb-4 text-amber-500">Why Choose Us?</h2>
+                <ul className="list-disc list-inside text-neutral-300 space-y-2">
                     <li>Direct support from fans</li>
                     <li>Zero platform fees for early adopters</li>
                     <li>Secure and fast payouts</li>
