@@ -191,7 +191,7 @@ const Navbar = () => {
                     {(session.user.name && session.user.name.charAt(0).toUpperCase()) || "U"}
                   </div>
                 )}
-                <svg className="w-2.5 h-2.5 ms-2 text-gray-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <svg className="w-2.5 h-2.5 ms-2 text-gray-950 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
                 </svg>
               </button>
@@ -205,20 +205,18 @@ const Navbar = () => {
               )}
 
 
-              <div id="dropdown" className={`z-20 ${showDropDown ? "" : "hidden"}  absolute top-16 ml-3 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700`}>
-                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+              <div id="dropdown" className={`z-20 ${showDropDown ? "" : "hidden"}  absolute top-16 ml-3 divide-y divide-gray-100 rounded-lg shadow-sm w-44 bg-gray-950`}>
+                <ul className="py-2 text-sm text-gray-200" aria-labelledby="dropdownDefaultButton">
                   <li>
-                    <Link onClick={() => setshowDropDown(false)} href="/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <Link onClick={() => setshowDropDown(false)} href="/dashboard" className="block px-4 py-2 hover:bg-gray-900 hover:text-white" >
                       Dashboard</Link>
                   </li>
                   <li>
-                    <Link onClick={() => setshowDropDown(false)} href={`/${session.user.name}`} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Your Page</Link>
+                    <Link onClick={() => setshowDropDown(false)} href={`/${session.user.name}`} className="block px-4 py-2 hover:bg-gray-900 hover:text-white">Your Page</Link>
                   </li>
+                  
                   <li>
-                    <Link onClick={() => setshowDropDown(false)} href="/earnings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</Link>
-                  </li>
-                  <li>
-                    <button onClick={() => { signOut() }} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</button>
+                    <button onClick={() => { signOut() }} className="block w-full text-left px-4 py-2 hover:bg-gray-900 hover:text-white">Sign out</button>
                   </li>
                 </ul>
               </div>
