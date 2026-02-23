@@ -7,16 +7,14 @@ import { fetchUser, updateUser } from '../action/useractions';
 import { ToastContainer, toast } from 'react-toastify';
 import { Bounce } from 'react-toastify';
 import { set } from 'mongoose';
-
-
-
+import { motion } from 'framer-motion';
 
 const Dashform = () => {
     const { data: session, update } = useSession()
     const [form, setform] = useState({})
     const [loading, setLoading] = useState(false)
     const [publicId, setPublicId] = useState(null);
-    const [initialized, setInitialized] = useState(false) // New line
+    const [initialized, setInitialized] = useState(false)
     const [profilePicName, setProfilePicName] = useState("");
     const [coverPicName, setCoverPicName] = useState("");
     const [showRazorpayId, setShowRazorpayId] = useState(false);
@@ -35,15 +33,14 @@ const Dashform = () => {
         if (!session?.user?.name) return;
         let u = await fetchUser(session.user.name);
         setform(u[0])
-        setInitialized(true); // Mark as initialized
+        setInitialized(true);
     }, [session]);
 
-    // Only run once on mount, or if session changes AND not yet initialized
     useEffect(() => {
         if (!session) {
             router.push('/Login')
         }
-        if (session && !initialized) { // Only fetch if we haven't already
+        if (session && !initialized) {
             getdata()
         }
     }, [router, session, getdata, initialized])
@@ -53,82 +50,96 @@ const Dashform = () => {
     }
 
     const handleFileUpload = async (file, oldPublicId) => {
-        // const file = e.target.files[0];
         if (!file) return;
-
 
         setLoading(true);
         try {
             const { url, publicId } = await uploadImage(file, oldPublicId);
             console.log("Uploaded image URL:", url);
             return { url, publicId };
-            // setform({ ...form, [file.name]: url });
-
-
         } catch (error) {
             console.error("Upload failed:", error);
         } finally {
             setLoading(false);
         }
-
     };
+
     const handleSubmit = async (e) => {
         let profilePicFile = e.get("profilepic");
         let coverPicFile = e.get("coverpic");
-        console.log(profilePicFile, coverPicFile)
         
-
-            // Upload profile picture if it's a file
-            if (profilePicFile && profilePicFile.size > 0 && profilePicFile.name) {
-                let currentPublicId = undefined;
-                // Use the ID directly from the database if it exists
-                if(form.profilepicId){
-                    currentPublicId = form.profilepicId;
-                } 
-                console.log("publicId:", currentPublicId )
-                const { url, publicId } = await handleFileUpload(profilePicFile , currentPublicId);
-                e.set("profilepic", url);
-                if (publicId) e.set("profilepicId", publicId); // Update profilepicId in DB
-                
+        // Upload profile picture if it's a file
+        if (profilePicFile && profilePicFile.size > 0 && profilePicFile.name) {
+            if(profilePicFile.size >  1024 * 1024) {
+                toast.error("Profile picture size exceeds 1MB limit!", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    color: "red",
+                    transition: Bounce,
+                });
+                return;
             }
-            // else remove it if it's not a new file, so we don't accidentally send a file object or empty string
-            else if (!profilePicFile || profilePicFile.size === 0) {
-                 e.delete("profilepic");
-                 // If you need to preserve existing URL:
-                 if (form.profilepic) {
-                     e.set("profilepic", form.profilepic);
-                 }
-                 if (form.profilepicId) {
-                     e.set("profilepicId", form.profilepicId);
-                 }
-            }
+            let currentPublicId = undefined;
+            if(form.profilepicId){
+                currentPublicId = form.profilepicId;
+            } 
+            const { url, publicId } = await handleFileUpload(profilePicFile , currentPublicId);
+            e.set("profilepic", url);
+            if (publicId) e.set("profilepicId", publicId);
+        }
+        else if (!profilePicFile || profilePicFile.size === 0) {
+             e.delete("profilepic");
+             if (form.profilepic) {
+                 e.set("profilepic", form.profilepic);
+             }
+             if (form.profilepicId) {
+                 e.set("profilepicId", form.profilepicId);
+             }
+        }
 
-
-            // Upload cover picture if it's a file
-            if (coverPicFile && coverPicFile.size > 0 && coverPicFile.name) {
-                let currentPublicId = undefined;
-                // Use the ID directly from the database if it exists
-                if(form.coverpicId){
-                    currentPublicId = form.coverpicId;
-                } 
-                console.log("publicId:", currentPublicId)
-                const { url, publicId } = await handleFileUpload(coverPicFile, currentPublicId);
-                e.set("coverpic", url);
-                if (publicId) e.set("coverpicId", publicId); // Update coverpicId in DB
+        // Upload cover picture if it's a file
+        if (coverPicFile && coverPicFile.size > 0 && coverPicFile.name) {
+            if(coverPicFile.size >  1024 * 1024) {
+                toast.error("Cover picture size exceeds 1MB limit!", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    color: "red",
+                    transition: Bounce,
+                });
+                return;
             }
-            else if (!coverPicFile || coverPicFile.size === 0) {
-                 e.delete("coverpic");
-                 if (form.coverpic) {
-                     e.set("coverpic", form.coverpic);
-                 }
-                 if (form.coverpicId) {
-                     e.set("coverpicId", form.coverpicId);
-                 }
-            }
-
+            let currentPublicId = undefined;
+            if(form.coverpicId){
+                currentPublicId = form.coverpicId;
+            } 
+            const { url, publicId } = await handleFileUpload(coverPicFile, currentPublicId);
+            e.set("coverpic", url);
+            if (publicId) e.set("coverpicId", publicId);
+        }
+        else if (!coverPicFile || coverPicFile.size === 0) {
+             e.delete("coverpic");
+             if (form.coverpic) {
+                 e.set("coverpic", form.coverpic);
+             }
+             if (form.coverpicId) {
+                 e.set("coverpicId", form.coverpicId);
+             }
+        }
 
         update()
-        let a = await updateUser(e, session.user.name)
+        await updateUser(e, session.user.name)
         toast('Profile updated successfully!', {
             position: "bottom-right",
             autoClose: 5000,
@@ -142,8 +153,14 @@ const Dashform = () => {
             transition: Bounce,
         });
     }
+
     return (
-        <div className='flex flex-col justify-center items-center gap-4 mt-4 '>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className='flex flex-col justify-center items-center px-2 gap-4 mt-8 pb-10 w-full'
+        >
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -158,79 +175,148 @@ const Dashform = () => {
                 transition={Bounce}
             />
 
-            <form action={handleSubmit}>
-                <div className="flex flex-col justify-center items-center mb-4 mx-auto w-[90vw] md:w-[90vw]  ">
-                    <div className="">
-                        <label htmlFor="name" className="block mb-2 text-sm font-medium  text-white">Name</label>
-                        <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5   placeholder-gray-400 " placeholder="John" required />
+            <div className="w-full max-w-2xl bg-black/40 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl overflow-hidden z-10">
+                <div className="bg-gradient-to-r from-amber-900/80 to-stone-900/80 p-6 text-center border-b border-white/10">
+                    <h2 className="text-3xl font-bold text-amber-50 mb-2 font-serif">Your Dashboard</h2>
+                    <p className="text-amber-200/70">Brew your perfect profile</p>
+                </div>
+                
+                <form action={handleSubmit} className="p-8 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <motion.div 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            <label htmlFor="name" className="block mb-2 text-sm font-medium text-amber-100">Name</label>
+                            <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" 
+                                className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                placeholder="John" required />
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-amber-100">Email address</label>
+                            <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" 
+                                className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                placeholder="john.doe@gmail.com" required />
+                        </motion.div>
                     </div>
-                    <div className="">
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium  text-white">Email address</label>
-                        <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block  p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="john.doe@gmail.com" required />
+                    
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-amber-100">Username</label>
+                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" 
+                            className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                            placeholder="01John" required />
+                    </motion.div>
+                    
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                    >
+                        <label htmlFor="about" className="block mb-2 text-sm font-medium text-amber-100">About / Your Story</label>
+                        <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" 
+                            className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                            placeholder="Tell your fans why you need funding and what your story is..."></textarea>
+                    </motion.div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <label className="block mb-2 text-sm font-medium text-amber-100">Profile Picture<span className="text-xs text-center text-gray-900 ml-1"> *Size must be less than 1MB</span></label>
+                            <label htmlFor="profilepic" 
+                                className="flex items-center justify-center w-full h-12 bg-black/30 border-2 border-dashed border-amber-900/30 text-amber-100 text-sm rounded-lg hover:bg-black/50 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
+                                <span className="truncate px-4 group-hover:text-amber-400 transition-colors">{profilePicName ? profilePicName : "Choose File"}</span>
+                            </label>
+                            <input type="file" name="profilepic" id="profilepic" className="hidden" onChange={handleFileChange} />
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                        >
+                            <label className="block mb-2 text-sm font-medium text-amber-100">Cover Picture <span className="text-xs text-center text-gray-900 ml-1"> *Size must be less than 1MB</span> </label>
+                            <label htmlFor="coverpic" 
+                                className="flex items-center justify-center w-full h-12 bg-black/30 border-2 border-dashed border-amber-900/30 text-amber-100 text-sm rounded-lg hover:bg-black/50 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
+                                <span className="truncate px-4 group-hover:text-amber-400 transition-colors">{coverPicName ? coverPicName : "Choose File"}</span>
+                            </label>
+                            <input type="file" name="coverpic" id="coverpic" className="hidden" onChange={handleFileChange} />
+                        </motion.div>
                     </div>
-                    <div>
-                        <label htmlFor="username" className="block mb-2 text-sm font-medium  text-white">Username</label>
-                        <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block  p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="01John" required />
-                    </div>
-                    <div>
-                        <label htmlFor="about" className="block mb-2 text-sm font-medium  text-white">About / Your Story</label>
-                        <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Tell your fans why you need funding and what your story is..."></textarea>
-                    </div>
-                    <div>
-                        <label className="block mb-2 text-sm font-medium  text-white">Profile Picture</label>
-                        <label htmlFor="profilepic" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  cursor-pointer">
-                            {profilePicName ? profilePicName : "Choose File"}
-                        </label>
-                        <input type="file" name="profilepic" id="profilepic" className="hidden" onChange={handleFileChange} />
-                    </div>
-                    <div>
-                        <label className="block mb-2 text-sm font-medium  text-white">Cover Picture</label>
-                        <label htmlFor="coverpic" className="bg-gray-50 border   w-[90vw] md:w-[60vw] text-sm rounded-lg  block p-2.5  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
-                            {coverPicName ? coverPicName : "Choose File"}
-                        </label>
-                        <input type="file" name="coverpic" id="coverpic" className="hidden" onChange={handleFileChange} />
-                    </div>
-                    <div>
-                        <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium  text-white">RazorPay ID</label>
-                        <div className="relative w-[90vw] md:w-[60vw]">
-                            <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" className="bg-gray-50 border   w-full text-sm rounded-lg  block p-2.5 pr-10  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Razorpay Id" required />
-                            <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 transition-colors duration-200">
-                                {showRazorpayId ? (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                                ) : (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium  text-white">RazorPay Secret</label>
-                        <div className="relative w-[90vw] md:w-[60vw]">
-                            <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" className="bg-gray-50 border   w-full text-sm rounded-lg  block p-2.5 pr-10  border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Razorpay Secret" required />
-                            <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3  hover:text-gray-200 transition-colors duration-200">
-                                {showRazorpaySecret ? (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
-                                ) : (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                )}
-                            </button>
-                        </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.7 }}
+                        >
+                            <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-amber-100">RazorPay ID</label>
+                            <div className="relative w-full">
+                                <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" 
+                                    className="bg-black/30 border border-amber-900/30 text-amber-50 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                    placeholder="Razorpay Id" required />
+                                <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-amber-400/50 hover:text-amber-400 transition-colors duration-200">
+                                    {showRazorpayId ? (
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                                    ) : (
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.8 }}
+                        >
+                            <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium text-amber-100">RazorPay Secret</label>
+                            <div className="relative w-full">
+                                <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" 
+                                    className="bg-black/30 border border-amber-900/30 text-amber-50 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                    placeholder="Razorpay Secret" required />
+                                <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-amber-400/50 hover:text-amber-400 transition-colors duration-200">
+                                    {showRazorpaySecret ? (
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                                    ) : (
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
                     </div>
 
                     <div className="flex items-start mb-6 mt-2">
                         <div className="flex items-center h-5">
-                            <input id="remember" type="checkbox" value="" className="w-4 h-4 border  rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300  border-gray-600  ring-offset-gray-800" required />
+                            <motion.input 
+                                whileHover={{ scale: 1.2 }}
+                                whileTap={{ scale: 0.9 }}
+                                id="remember" type="checkbox" value="" 
+                                className="w-4 h-4 border border-amber-900/50 rounded-sm bg-black/30 text-amber-600 focus:ring-3 focus:ring-amber-600 ring-offset-gray-800" required />
                         </div>
-                        <label htmlFor="remember" className="ms-2 text-sm font-medium  text-gray-300">I agree with the <a href="#" className="text-blue-600 hover:underline ">terms and conditions</a>.</label>
+                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-amber-100">I agree with the <a href="#" className="text-amber-400 hover:underline hover:text-amber-300">terms and conditions</a>.</label>
                     </div>
-                    <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  focus:ring-blue-800">Submit</button>
-                </div>
-            </form>
-
-
-
-
-        </div>
+                    
+                    <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit" 
+                        className="w-full text-white bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 focus:ring-4 focus:outline-none focus:ring-amber-900 font-medium rounded-lg text-sm px-5 py-3 text-center shadow-lg hover:shadow-amber-900/50 transition-all font-bold"
+                    >
+                        Save Profile
+                    </motion.button>
+                </form>
+            </div>
+        </motion.div>
     )
 }
 
