@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation';
-import { searchUsers } from '../action/useractions';
+import { searchUsers, fetchUser } from '../action/useractions';
 
 import Coffeemug from './Coffeemug'
 import Link from 'next/link'
@@ -13,11 +13,24 @@ const Navbar = () => {
   const { data: session } = useSession()
   const [showDropDown, setshowDropDown] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
   const router = useRouter()
   const searchRef = useRef(null)
+
+  useEffect(() => {
+    const getUserData = async () => {
+      if (session && session.user && session.user.name) {
+        let u = await fetchUser(session.user.name);
+        let userObj = Array.isArray(u) ? (u[0] || {}) : (u || {});
+        setCurrentUser(userObj);
+      }
+    };
+    getUserData();
+  }, [session]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -42,6 +55,7 @@ const Navbar = () => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSuggestions(false);
+        setShowSearchDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -54,9 +68,9 @@ const Navbar = () => {
   // }
 
   return (
-    <nav className='relative'>
-      <header className="bg-white  dark:bg-[#3b2f30] shadow-lg relative">
-        <nav className="container mx-auto px-8 py-2 h-16 flex justify-between items-center">
+    <nav className='relative w-full'>
+      <header className="bg-white dark:bg-[#3b2f30] shadow-lg relative w-full">
+        <nav className="w-full px-4 sm:px-8 py-2 h-16 flex justify-between items-center">
           <div className="flex items-center space-x-2">
               <Coffeemug />
             <Link href="/" className="text-xl text-center font-bold text-indigo-800 dark:text-white transition-colors duration-300">Get Me a Chai
@@ -72,26 +86,71 @@ const Navbar = () => {
             
             {/* Search Bar */}
             <div className="relative" ref={searchRef}>
-              <input
-                type="text"
-                placeholder="Search users..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
-                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5"
-              />
+              {/* Desktop Search (lg and up) */}
+              <div className="hidden lg:block relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
+                  className="bg-gray-950 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 pl-10 p-2.5"
+                />
+              </div>
+
+              {/* Tablet Search Icon (md to lg) */}
+              <div className="lg:hidden">
+                <button 
+                  onClick={() => setShowSearchDropdown(!showSearchDropdown)}
+                  className="p-2.5 bg-gray-900 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                  <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  </svg>
+                </button>
+
+                {/* Tablet Search Dropdown */}
+                {showSearchDropdown && (
+                  <div className="absolute top-12 right-0 z-50   p-3 w-64 ">
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-950" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        autoFocus
+                        placeholder="Search users..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
+                        className="bg-gray-950 text-[#f0f0f0] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Suggestions Dropdown (Shared) */}
               {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 divide-y divide-gray-100 rounded-lg shadow-lg w-64 max-h-60 overflow-y-auto">
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <div className={`absolute top-12 ${showSearchDropdown ? 'right-0 mt-14' : 'left-0'} z-50 bg-gray-950 divide-y divide-gray-100 rounded-lg shadow-lg w-64 max-h-60 overflow-y-auto`}>
+                  <ul className="py-2 text-sm text-gray-950">
                     {suggestions.map((user) => (
                       <li key={user._id}>
                         <button
                           onClick={() => {
                             setShowSuggestions(false);
+                            setShowSearchDropdown(false);
                             setSearchQuery("");
                             router.push(`/${user.username}`);
                           }}
-                          className="flex items-center w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left"
+                          className="flex items-center w-full px-4 py-2 hover:bg-gray-100 text-[#f0f0f0] dark:hover:text-white text-left"
                         >
                           {user.profilepic ? (
                             <img src={user.profilepic} alt={user.username} className="w-8 h-8 rounded-full mr-3 object-cover" />
@@ -111,7 +170,7 @@ const Navbar = () => {
                 </div>
               )}
               {showSuggestions && searchQuery.trim().length > 0 && suggestions.length === 0 && (
-                <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 rounded-lg shadow-lg w-64 p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                <div className={`absolute top-12 ${showSearchDropdown ? 'right-0 mt-14' : 'left-0'} z-50 bg-gray-950 rounded-lg shadow-lg w-64 p-4 text-center text-sm text-gray-500 dark:text-gray-400`}>
                   No users found
                 </div>
               )}
@@ -120,9 +179,21 @@ const Navbar = () => {
             {session && <>
               {/* dropdown content */}
 
-              <button onClick={() => { setshowDropDown(!showDropDown) }} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white mx-3 relative bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">{(session.user.name && session.user.name.split(" ")[0]) || "User"}{" "} <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-              </svg>
+              <button onClick={() => { setshowDropDown(!showDropDown) }} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="mx-3 relative focus:outline-none font-medium rounded-full text-sm text-center inline-flex items-center transition-transform hover:scale-105" type="button">
+                {currentUser?.profilepic || session?.user?.image ? (
+                  <img 
+                    src={currentUser?.profilepic || session?.user?.image} 
+                    alt="Profile" 
+                    className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 dark:border-indigo-400"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold border-2 border-indigo-500 dark:border-indigo-400">
+                    {(session.user.name && session.user.name.charAt(0).toUpperCase()) || "U"}
+                  </div>
+                )}
+                <svg className="w-2.5 h-2.5 ms-2 text-gray-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                </svg>
               </button>
 
               {showDropDown && (
@@ -200,13 +271,18 @@ const Navbar = () => {
           <div className="flex flex-col  p-4 space-y-4">
             {/* Mobile Search Bar */}
             <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+              </div>
               <input
                 type="text"
                 placeholder="Search users..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true) }}
-                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
               />
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-12 left-0 z-50 bg-white dark:bg-gray-700 divide-y divide-gray-100 rounded-lg shadow-lg w-full max-h-60 overflow-y-auto">
