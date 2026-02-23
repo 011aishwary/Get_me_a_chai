@@ -1,36 +1,206 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Get Me a Chai ☕
 
-## Getting Started
+A Patreon-style crowdfunding platform built with Next.js where creators can receive support from their fans. "Get Me a Chai" allows developers, creators, and artists to fund their projects by receiving "chais" (small donations) from their supporters.
 
-First, run the development server:
+## 🌟 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 🔐 Authentication & Security
+- **OAuth Integration**: Secure and fast login using **GitHub** and **Google** via [NextAuth.js](https://next-auth.js.org/).
+- **Session Management**: Persistent sessions ensure users stay logged in across devices.
+- **Data Protection**: Sensitive information like Razorpay secrets is **encrypted** before being stored in the database.
+
+### 🎨 User Dashboard & Customization
+- **Personalized Profile**: Every user gets a unique URL (e.g., `getmeachai.com/username`) to share with their audience.
+- **Dynamic Profile Editing**: Users can update their display name, username, about section, profile picture, and cover image directly from the dashboard.
+- **Image Optimization**: Profile and cover images are uploaded to **Cloudinary** for optimized delivery and storage, ensuring fast load times.
+
+### 💳 Payments & Transactions
+- **Razorpay Integration**: Seamless payment processing using the Razorpay gateway.
+- **Direct Support**: Fans can send money directly to creators with a custom message.
+- **Real-time Updates**: Payment status is updated in real-time, and successful transactions are immediately recorded in the database.
+- **Transaction History**: Creators can view a list of all their received payments and messages.
+
+### 🔍 Discovery & Interaction
+- **Creator Search**: A robust search bar allows users to find creators by their username.
+- **Interactive UI**: Utilizing **Framer Motion**, the application features smooth animations and transitions for a polished user experience.
+- **Responsive Design**: Fully responsive layout built with **Tailwind CSS**, ensuring the site looks great on mobile, tablet, and desktop.
+
+---
+
+## 🏗️ Architecture & Tech Stack
+
+This project leverages the power of the **MERN** stack (modified for Next.js) to deliver a high-performance web application.
+
+| Technology | Purpose |
+|------------|---------|
+| **[Next.js 14](https://nextjs.org/)** | The core framework Using App Router, Server Components, and Server Actions for a hybrid client/server architecture. |
+| **[React.js](https://react.dev/)** | Library for building the interactive user interface and component-based structure. |
+| **[Tailwind CSS](https://tailwindcss.com/)** | Utility-first CSS framework for rapid and responsive UI styling. |
+| **[MongoDB](https://www.mongodb.com/)** | NoSQL database for flexible and scalable data storage. |
+| **[Mongoose](https://mongoosejs.com/)** | ODM library for MongoDB schema validation and database interaction. |
+| **[NextAuth.js](https://next-auth.js.org/)** | Complete open-source authentication solution for Next.js applications. |
+| **[Razorpay](https://razorpay.com/)** | Payment gateway integration for processing donations. |
+| **[Cloudinary](https://cloudinary.com/)** | Cloud-based image and video management service. |
+| **[Framer Motion](https://www.framer.com/motion/)** | Production-ready motion library for React animations. |
+| **[Lucide React](https://lucide.dev/)** | Beautiful and consistent icon set. |
+
+---
+
+## 🔄 User Workflow
+
+### For Creators:
+1.  **Sign Up**: Log in using a GitHub or Google account.
+2.  **Setup Profile**: Navigate to the dashboard to set a username, bio, and upload profile/cover photos.
+3.  **Connect Payment**: Enter Razorpay API keys (Key ID and Secret) in the dashboard settings to enable receiving payments.
+4.  **Share**: Copy the unique profile link and share it with fans and followers.
+
+### For Supporters:
+1.  **Discover**: Search for a creator or click on a shared profile link.
+2.  **Support**: Choose a donation amount or enter a custom value.
+3.  **Message**: Use the "Say something nice" field to leave a personalized message with the donation.
+4.  **Pay**: Complete the transaction securely via Razorpay.
+
+---
+
+## 🗄️ Database Schema
+
+The application uses **MongoDB** with two primary models:
+
+### 1. User Model
+Stores user identification and profile metadata.
+*   `username`: Unique identifier for the profile URL.
+*   `email`: User's email address (from OAuth).
+*   `name`: Display name.
+*   `profilepic`: URL to the Cloudinary image.
+*   `coverpic`: URL to the Cloudinary image.
+*   `razorpayId`: Encrypted Razorpay Key ID.
+*   `razorpaySecret`: Encrypted Razorpay Secret Key.
+*   `createdAt`: Timestamp of account creation.
+
+### 2. Payment Model
+Records transaction details.
+*   `name`: Name of the supporter (or "Anonymous").
+*   `to_user`: Username of the recipient.
+*   `oid`: Order ID generated by Razorpay.
+*   `message`: Custom message from the supporter.
+*   `amount`: Donation amount.
+*   `createdAt`: Timestamp of transaction.
+*   `done`: Boolean status of payment completion.
+
+---
+
+## ⚙️ Environment Variables
+
+To run this project locally, you must configure the following environment variables in a `.env.local` file at the root of your project:
+
+```env
+# Database Connection
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/chai
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_super_secret_key_here
+
+# OAuth Providers (Get these from developer consoles of Google/GitHub)
+GITHUB_ID=your_github_client_id
+GITHUB_SECRET=your_github_client_secret
+AUTH_GOOGLE_ID=your_google_client_id
+AUTH_GOOGLE_SECRET=your_google_client_secret
+
+# Payment Gateway (Razorpay)
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+
+# Encryption (Use a 32-byte string for best security)
+ENCRYPTION_KEY=your_encryption_key_32_bytes_long
+
+# Cloudinary (Image Uploads)
+# Create a free account at cloudinary.com to get these
+CLOUD_NAME=your_cloudinary_cloud_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_api_secret
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📦 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Follow this comprehensive guide to get the project running on your local machine.
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+*   **Node.js** (v18.17.0 or higher)
+*   **npm** (Node Package Manager)
+*   **MongoDB Atlas** account (or a local MongoDB instance)
+*   **Cloudinary** account (for image hosting)
+*   **Razorpay** account (in Test Mode for development)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Step-by-Step Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/yourusername/get-me-a-chai.git
+    cd get_me_a_chai
+    ```
 
-## Deploy on Vercel
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+    *This command will install all necessary packages listed in `package.json`.*
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3.  **Configure Environment**
+    Create a new file named `.env.local` in the root directory and paste the variables mentioned in the [Environment Variables](#%EF%B8%8F-environment-variables) section. Fill in your specific API keys.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
+
+5.  **Access the Application**
+    Open your browser and navigate to `http://localhost:3000`. You should see the landing page!
+
+---
+
+## 📂 Project Structure
+
+A quick overview of the main directories and their purpose:
+
+```bash
+📦 get_me_a_chai
+ ┣ 📂 action           # Server Actions: Handles backend logic like auth and database updates
+ ┣ 📂 app              # Next.js App Router: Contains all pages and API routes
+ ┃ ┣ 📂 api            # REST API endpoints (e.g., /api/auth/[...nextauth])
+ ┃ ┣ 📂 [username]     # Dynamic Route: Renders the user's public profile page
+ ┃ ┣ 📂 dashboard      # Protected Route: User settings and analytics
+ ┃ ┗ 📜 layout.js      # Root layout wrapped with SessionProvider
+ ┣ 📂 components       # React Components: Reusable UI elements (Navbar, Footer, PaymentPage)
+ ┣ 📂 db               # Database: MongoDB connection logic
+ ┣ 📂 lib              # Utilities: Helper functions and configurations
+ ┣ 📂 models           # Mongoose Schemas: Defines structure for User and Payment data
+ ┣ 📂 public           # Static Assets: Images, icons, and global files
+ ┗ 📜 tailwind.config  # Tailwind: Custom configuration for styling
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Whether it's fixing a bug, improving documentation, or adding a new feature, here's how you can help:
+
+1.  **Fork** the project on GitHub.
+2.  **Clone** your forked repository.
+3.  **Create a Branch** for your feature or fix: `git checkout -b feature/NewFeature`.
+4.  **Commit** your changes: `git commit -m 'Add some NewFeature'`.
+5.  **Push** to the branch: `git push origin feature/NewFeature`.
+6.  **Open a Pull Request** to the `main` branch of the original repository.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+Made with ❤️ by [Aishwary](https://github.com/011aishwary)

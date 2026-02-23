@@ -17,17 +17,17 @@ const Features = () => {
             title: "Global Payments",
             icon: <Globe className="w-8 h-8" />,
             description: "Accept payments from anywhere in the world with seamless multi-currency support.",
-            color: "text-blue-400",
-            bg: "bg-blue-500/10",
-            hover: "group-hover:bg-blue-500/20 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+            color: "text-amber-400",
+            bg: "bg-amber-500/10",
+            hover: "group-hover:bg-amber-500/20 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.3)]"
         },
         {
             title: "Creator Dashboard",
             icon: <BarChart3 className="w-8 h-8" />,
             description: "Powerful insights and analytics to track your growth, earnings, and fan engagement.",
-            color: "text-purple-400",
-            bg: "bg-purple-500/10",
-            hover: "group-hover:bg-purple-500/20 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+            color: "text-orange-400",
+            bg: "bg-orange-500/10",
+            hover: "group-hover:bg-orange-500/20 group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]"
         },
         {
             title: "Instant Access",
@@ -41,17 +41,17 @@ const Features = () => {
             title: "Custom Branding",
             icon: <Palette className="w-8 h-8" />,
             description: "Personalize your page with custom themes, colors, and layouts to match your unique brand.",
-            color: "text-pink-400",
-            bg: "bg-pink-500/10",
-            hover: "group-hover:bg-pink-500/20 group-hover:shadow-[0_0_20px_rgba(236,72,153,0.3)]"
+            color: "text-rose-400",
+            bg: "bg-rose-500/10",
+            hover: "group-hover:bg-rose-500/20 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.3)]"
         },
         {
             title: "Community Driven",
             icon: <Users className="w-8 h-8" />,
             description: "Join a thriving network of creators. Collaborate, share, and grow together.",
-            color: "text-indigo-400",
-            bg: "bg-indigo-500/10",
-            hover: "group-hover:bg-indigo-500/20 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            color: "text-red-400",
+            bg: "bg-red-500/10",
+            hover: "group-hover:bg-red-500/20 group-hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]"
         },
     ];
 
@@ -78,20 +78,20 @@ const Features = () => {
     };
 
     return (
-        <section className="py-24 bg-gradient-to-b from-[#3b2f30] via-[#2a2122] to-[#1a1415] text-white overflow-hidden relative">
+        <section className="py-24 bg-neutral-900 text-white overflow-hidden relative">
              {/* Decorative Elements */}
              <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.5 }}
                     whileInView={{ opacity: 0.1, scale: 1 }}
                     transition={{ duration: 1.5 }}
-                    className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-indigo-600 rounded-full blur-[128px]"
+                    className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-amber-600 rounded-full blur-[128px]"
                 />
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.5 }}
                     whileInView={{ opacity: 0.1, scale: 1 }}
                     transition={{ duration: 1.5, delay: 0.2 }}
-                    className="absolute bottom-0 right-0 w-[40%] h-[40%] bg-purple-600 rounded-full blur-[100px]"
+                    className="absolute bottom-0 right-0 w-[40%] h-[40%] bg-orange-600 rounded-full blur-[100px]"
                 />
             </div>
 

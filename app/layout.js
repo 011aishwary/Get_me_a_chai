@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
 
             {children}
           </div>
-          <div className="relative  bg-[#3b2f30]  bottom-0 flex items-center justify-center mx-auto">
+          <div className="relative  bg-neutral-950 border-t border-gray-400/20 bottom-0 flex items-center justify-center mx-auto">
 
             <Footer />
           </div>

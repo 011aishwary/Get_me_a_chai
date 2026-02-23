@@ -12,9 +12,9 @@ const Testimonials = () => {
     // Simple state could be used here for a slider, but a grid is cleaner for now
     
   return (
-    <section className="py-24 bg-[#5c4a4a] relative overflow-hidden">
+    <section className="py-24 bg-neutral-950 relative overflow-hidden">
         {/* Animated pattern */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-gray-900 to-black"></div>
+        <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900 via-neutral-900 to-black"></div>
 
       <div className="container mx-auto px-6 text-center z-10 relative">
         <motion.h2 
@@ -22,7 +22,7 @@ const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold text-[#f2f2ef] mb-16 tracking-tight"
+          className="text-4xl md:text-5xl font-bold text-white mb-16 tracking-tight"
         >
           What Creators Say
         </motion.h2>
@@ -36,24 +36,24 @@ const Testimonials = () => {
               transition={{ delay: i * 0.2, duration: 0.6 }}
               whileHover={{ 
                   y: -10,
-                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
                }}
               viewport={{ once: true, amount: 0.2 }}
-              className="bg-[#3b2f30] p-8 rounded-3xl shadow-xl border border-gray-600 relative overflow-hidden group"
+              className="bg-neutral-900 p-8 rounded-3xl shadow-xl border border-white/5 relative overflow-hidden group hover:border-amber-500/30 transition-all"
             >
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-500 rounded-full opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-amber-500 rounded-full opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
               
               <div className="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-300 drop-shadow-lg scale-100 filter grayscale-0">
                   {t.avatar}
               </div>
               
-              <p className="text-gray-300 italic mb-6 text-lg relative z-10 leading-relaxed font-light">
+              <p className="text-neutral-300 italic mb-6 text-lg relative z-10 leading-relaxed font-light">
                   &quot;{t.quote}&quot;
               </p>
               
               <div className="mt-auto">
-                  <h4 className="text-xl font-bold text-[#f2f2ef] group-hover:text-indigo-300 transition-colors">{t.name}</h4>
-                  <span className="text-sm text-indigo-400 font-medium uppercase tracking-wider">{t.role}</span>
+                  <h4 className="text-xl font-bold text-white group-hover:text-amber-400 transition-colors">{t.name}</h4>
+                  <span className="text-sm text-amber-500/80 font-medium uppercase tracking-wider">{t.role}</span>
               </div>
             </motion.div>
           ))}

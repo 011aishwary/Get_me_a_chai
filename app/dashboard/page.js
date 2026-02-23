@@ -20,7 +20,7 @@ const Dashboard = () => {
     
     
   return (
-    <div>
+    <div className='min-h-screen bg-neutral-950 text-white pt-24'>
       <Dashform/>
     </div>
   )

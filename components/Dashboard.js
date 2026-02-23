@@ -175,10 +175,10 @@ const Dashform = () => {
                 transition={Bounce}
             />
 
-            <div className="w-full max-w-2xl bg-black/40 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl overflow-hidden z-10">
-                <div className="bg-gradient-to-r from-amber-900/80 to-stone-900/80 p-6 text-center border-b border-white/10">
-                    <h2 className="text-3xl font-bold text-amber-50 mb-2 font-serif">Your Dashboard</h2>
-                    <p className="text-amber-200/70">Brew your perfect profile</p>
+            <div className="w-full max-w-2xl bg-neutral-900/50 backdrop-blur-md rounded-xl border border-neutral-800 shadow-2xl overflow-hidden z-10">
+                <div className="bg-neutral-900 p-6 text-center border-b border-neutral-800">
+                    <h2 className="text-3xl font-bold text-white mb-2 font-serif">Your Dashboard</h2>
+                    <p className="text-neutral-400">Brew your perfect profile</p>
                 </div>
                 
                 <form action={handleSubmit} className="p-8 space-y-6">
@@ -188,9 +188,9 @@ const Dashform = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 }}
                         >
-                            <label htmlFor="name" className="block mb-2 text-sm font-medium text-amber-100">Name</label>
+                            <label htmlFor="name" className="block mb-2 text-sm font-medium text-neutral-300">Name</label>
                             <input type="text" onChange={handleChange} value={form.name ? form.name : ""} name="name" id="name" 
-                                className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                                 placeholder="John" required />
                         </motion.div>
                         <motion.div
@@ -198,9 +198,9 @@ const Dashform = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
                         >
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-amber-100">Email address</label>
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-neutral-300">Email address</label>
                             <input type="email" onChange={handleChange} value={form.email ? form.email : ""} name="email" id="email" 
-                                className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                                 placeholder="john.doe@gmail.com" required />
                         </motion.div>
                     </div>
@@ -210,9 +210,9 @@ const Dashform = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-amber-100">Username</label>
+                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-neutral-300">Username</label>
                         <input type="text" onChange={handleChange} value={form.username ? form.username : ""} name="username" id="first_name" 
-                            className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                            className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                             placeholder="01John" required />
                     </motion.div>
                     
@@ -221,9 +221,9 @@ const Dashform = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                     >
-                        <label htmlFor="about" className="block mb-2 text-sm font-medium text-amber-100">About / Your Story</label>
+                        <label htmlFor="about" className="block mb-2 text-sm font-medium text-neutral-300">About / Your Story</label>
                         <textarea onChange={handleChange} value={form.about ? form.about : ""} name="about" id="about" rows="4" 
-                            className="bg-black/30 border border-amber-900/30 text-amber-50 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                            className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                             placeholder="Tell your fans why you need funding and what your story is..."></textarea>
                     </motion.div>
                     
@@ -233,10 +233,10 @@ const Dashform = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
                         >
-                            <label className="block mb-2 text-sm font-medium text-amber-100">Profile Picture<span className="text-xs text-center text-gray-900 ml-1"> *Size must be less than 1MB</span></label>
+                            <label className="block mb-2 text-sm font-medium text-neutral-300">Profile Picture<span className="text-xs text-center text-neutral-500 ml-1"> *Size must be less than 1MB</span></label>
                             <label htmlFor="profilepic" 
-                                className="flex items-center justify-center w-full h-12 bg-black/30 border-2 border-dashed border-amber-900/30 text-amber-100 text-sm rounded-lg hover:bg-black/50 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
-                                <span className="truncate px-4 group-hover:text-amber-400 transition-colors">{profilePicName ? profilePicName : "Choose File"}</span>
+                                className="flex items-center justify-center w-full h-12 bg-neutral-950/50 border-2 border-dashed border-neutral-800 text-neutral-400 text-sm rounded-lg hover:bg-neutral-900 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
+                                <span className="truncate px-4 group-hover:text-amber-500 transition-colors">{profilePicName ? profilePicName : "Choose File"}</span>
                             </label>
                             <input type="file" name="profilepic" id="profilepic" className="hidden" onChange={handleFileChange} />
                         </motion.div>
@@ -245,10 +245,10 @@ const Dashform = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
                         >
-                            <label className="block mb-2 text-sm font-medium text-amber-100">Cover Picture <span className="text-xs text-center text-gray-900 ml-1"> *Size must be less than 1MB</span> </label>
+                            <label className="block mb-2 text-sm font-medium text-neutral-300">Cover Picture <span className="text-xs text-center text-neutral-500 ml-1"> *Size must be less than 1MB</span> </label>
                             <label htmlFor="coverpic" 
-                                className="flex items-center justify-center w-full h-12 bg-black/30 border-2 border-dashed border-amber-900/30 text-amber-100 text-sm rounded-lg hover:bg-black/50 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
-                                <span className="truncate px-4 group-hover:text-amber-400 transition-colors">{coverPicName ? coverPicName : "Choose File"}</span>
+                                className="flex items-center justify-center w-full h-12 bg-neutral-950/50 border-2 border-dashed border-neutral-800 text-neutral-400 text-sm rounded-lg hover:bg-neutral-900 hover:border-amber-500 cursor-pointer transition-all duration-300 group">
+                                <span className="truncate px-4 group-hover:text-amber-500 transition-colors">{coverPicName ? coverPicName : "Choose File"}</span>
                             </label>
                             <input type="file" name="coverpic" id="coverpic" className="hidden" onChange={handleFileChange} />
                         </motion.div>
@@ -260,12 +260,12 @@ const Dashform = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.7 }}
                         >
-                            <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-amber-100">RazorPay ID</label>
+                            <label htmlFor="razorpayId" className="block mb-2 text-sm font-medium text-neutral-300">RazorPay ID</label>
                             <div className="relative w-full">
                                 <input type={showRazorpayId ? "text" : "password"} onChange={handleChange} value={form.razorpayId ? form.razorpayId : ""} name="razorpayId" id="phone" 
-                                    className="bg-black/30 border border-amber-900/30 text-amber-50 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                    className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                                     placeholder="Razorpay Id" required />
-                                <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-amber-400/50 hover:text-amber-400 transition-colors duration-200">
+                                <button type="button" onClick={() => setShowRazorpayId(!showRazorpayId)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-500 hover:text-amber-500 transition-colors duration-200">
                                     {showRazorpayId ? (
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                                     ) : (
@@ -279,12 +279,12 @@ const Dashform = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.8 }}
                         >
-                            <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium text-amber-100">RazorPay Secret</label>
+                            <label htmlFor="razorpaySecret" className="block mb-2 text-sm font-medium text-neutral-300">RazorPay Secret</label>
                             <div className="relative w-full">
                                 <input type={showRazorpaySecret ? "text" : "password"} onChange={handleChange} value={form.razorpaySecret ? form.razorpaySecret : ""} name="razorpaySecret" id="website" 
-                                    className="bg-black/30 border border-amber-900/30 text-amber-50 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-amber-200/30 transition-all duration-300 hover:border-amber-500/50" 
+                                    className="bg-neutral-950/50 border border-neutral-800 text-neutral-200 w-full text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2.5 pr-10 placeholder-neutral-600 transition-all duration-300 hover:border-amber-500/50" 
                                     placeholder="Razorpay Secret" required />
-                                <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-amber-400/50 hover:text-amber-400 transition-colors duration-200">
+                                <button type="button" onClick={() => setShowRazorpaySecret(!showRazorpaySecret)} className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-500 hover:text-amber-500 transition-colors duration-200">
                                     {showRazorpaySecret ? (
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                                     ) : (
@@ -301,16 +301,16 @@ const Dashform = () => {
                                 whileHover={{ scale: 1.2 }}
                                 whileTap={{ scale: 0.9 }}
                                 id="remember" type="checkbox" value="" 
-                                className="w-4 h-4 border border-amber-900/50 rounded-sm bg-black/30 text-amber-600 focus:ring-3 focus:ring-amber-600 ring-offset-gray-800" required />
+                                className="w-4 h-4 border border-neutral-700 rounded-sm bg-neutral-900 text-amber-600 focus:ring-3 focus:ring-amber-600 ring-offset-gray-800" required />
                         </div>
-                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-amber-100">I agree with the <a href="#" className="text-amber-400 hover:underline hover:text-amber-300">terms and conditions</a>.</label>
+                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-neutral-300">I agree with the <a href="#" className="text-amber-500 hover:underline hover:text-amber-400">terms and conditions</a>.</label>
                     </div>
                     
                     <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type="submit" 
-                        className="w-full text-white bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 focus:ring-4 focus:outline-none focus:ring-amber-900 font-medium rounded-lg text-sm px-5 py-3 text-center shadow-lg hover:shadow-amber-900/50 transition-all font-bold"
+                        className="w-full text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 focus:ring-4 focus:outline-none focus:ring-amber-900/50 font-medium rounded-lg text-sm px-5 py-3 text-center shadow-lg hover:shadow-amber-900/40 transition-all font-bold"
                     >
                         Save Profile
                     </motion.button>
