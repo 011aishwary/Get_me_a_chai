@@ -89,7 +89,7 @@ const Navbar = () => {
               {/* Desktop Search (lg and up) */}
               <div className="hidden lg:block  relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                   </svg>
                 </div>
@@ -107,7 +107,7 @@ const Navbar = () => {
               <div className="lg:hidden">
                 <button 
                   onClick={() => setShowSearchDropdown(!showSearchDropdown)}
-                  className="p-2.5 bg-gray-900 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="p-2.5 bg-gray-900 rounded-full hover:bg-gray-800  transition-colors"
                 >
                   <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -150,7 +150,7 @@ const Navbar = () => {
                             setSearchQuery("");
                             router.push(`/${user.username}`);
                           }}
-                          className="flex items-center w-full px-4 py-2 hover:bg-gray-100 text-[#f0f0f0] dark:hover:text-white text-left"
+                          className="flex items-center w-full px-4 py-2 hover:bg-gray-900 rounded-2xl  text-[#f0f0f0] hover:text-white text-left"
                         >
                           {user.profilepic ? (
                             <img src={user.profilepic} alt={user.username} className="w-8 h-8 rounded-full mr-3 object-cover" />
