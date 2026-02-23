@@ -91,7 +91,7 @@ const HeroSection = () => {
                         whileHover={{ rotate: 10, scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 300 }}
                     >
-                        <Coffeemug />
+                        <Coffeemug loop={true} />
                     </motion.div>
                     <motion.h1
                         initial={{ x: -20, opacity: 0 }}
@@ -107,10 +107,10 @@ const HeroSection = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
-                    className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed"
+                    className="text-xl md:text-2xl text-gray-900 max-w-2xl mx-auto mb-10 leading-relaxed"
                 >
                     A crowdfunding platform for creators. Get funded by your fans and followers.
-                    <span className="block mt-2 text-indigo-400 font-semibold type-writer">Start your creative journey now!</span>
+                    <span className="block mt-2 text-indigo-600 font-semibold type-writer">Start your creative journey now!</span>
                 </motion.p>
 
                 <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-16">

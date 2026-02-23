@@ -1,4 +1,6 @@
+import { Coffee } from 'lucide-react'
 import React from 'react'
+import Coffeemug from './Coffeemug'
 
 const Footer = () => {
   return (
@@ -7,8 +9,11 @@ const Footer = () => {
         <div className=" max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 <div className="text-center text-4xl font-semibold  text-[#f2f2ef] ">
+                  <span className="flex md:flex-row flex-col items-center justify-center">
 
+                <Coffeemug loop={true} />
                 Get Me a Chai
+                  </span>
                 </div>
                     <ul className="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-16 mb-10 border-b border-gray-200">
                         <li><a href="/about" className="text-[#f2f2ef] hover:text-[#c2a991]">About</a></li>

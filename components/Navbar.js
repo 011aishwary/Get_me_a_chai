@@ -72,7 +72,7 @@ const Navbar = () => {
       <header className="bg-white dark:bg-[#3b2f30] shadow-lg relative w-full">
         <nav className="w-full px-4 sm:px-8 py-2 h-16 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-              <Coffeemug />
+              <Coffeemug loop={false} />
             <Link href="/" className="text-xl text-center font-bold text-indigo-800 dark:text-white transition-colors duration-300">Get Me a Chai
             </Link>
           </div>
