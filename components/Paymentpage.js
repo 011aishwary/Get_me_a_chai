@@ -17,6 +17,7 @@ const Paymentpage = ({ username }) => {
     const [payments, setpayments] = useState([])
     const [loading, setLoading] = useState(true)
     const [isExpanded, setIsExpanded] = useState(false)
+    const [paymentLoading, setPaymentLoading] = useState(false)
 
     useEffect(() => {
         if (searchParams.get('paymentdone') === "true") {
@@ -49,23 +50,37 @@ const Paymentpage = ({ username }) => {
     }, [getpayments])
 
     const pay = async (amount) => {
-        let a = await initiate(amount, username, form)
-        let orderid = a.id
-        var options = {
-            "key": currentuser.razorpayId,
-            "amount": amount,
-            "currency": "INR",
-            "name": "Get me a Chai",
-            "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
-            "order_id": orderid,
-            "callback_url": `${window.location.origin}/api/razorpay`,
-            "prefill": { "name": "", "email": "", "contact": "" },
-            "notes": { "address": "Get me a Chai Corporate Office" },
-            "theme": { "color": "#3399cc" }
+        setPaymentLoading(true);
+        try {
+            let a = await initiate(amount, username, form)
+            let orderid = a.id
+            var options = {
+                "key": currentuser.razorpayId,
+                "amount": amount,
+                "currency": "INR",
+                "name": "Get me a Chai",
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": orderid,
+                "callback_url": `${window.location.origin}/api/razorpay`,
+                "prefill": { "name": "", "email": "", "contact": "" },
+                "notes": { "address": "Get me a Chai Corporate Office" },
+                "theme": { "color": "#3399cc" },
+                "modal": {
+                    "ondismiss": function() {
+                        setPaymentLoading(false);
+                    }
+                }
+            }
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response){
+                setPaymentLoading(false);
+            });
+            rzp1.open()
+        } catch (error) {
+            console.error("Payment initiation failed:", error);
+            setPaymentLoading(false);
         }
-        var rzp1 = new Razorpay(options);
-        rzp1.open()
     }
 
     return (
@@ -267,12 +282,27 @@ const Paymentpage = ({ username }) => {
                         <motion.button 
                             type="button"
                             onClick={() => pay((form.amount) * 100)} 
-                            disabled={!form.amount || form.name.length < 3 || form.message.length < 3}
+                            disabled={!form.amount || form.name.length < 3 || form.message.length < 3 || paymentLoading}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full py-3.5 mt-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className={`w-full py-3.5 mt-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex justify-center items-center relative overflow-hidden`}
                         >
-                            Pay ₹{form.amount || '0'}
+                            {paymentLoading ? (
+                                <>
+                                    <motion.div 
+                                        className="absolute inset-0 bg-white/20"
+                                        initial={{ x: "-100%" }}
+                                        animate={{ x: "100%" }}
+                                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                                    />
+                                    <svg aria-hidden="true" role="status" className="inline w-6 h-6 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+                                    </svg>
+                                </>
+                            ) : (
+                                `Pay ₹${form.amount || '0'}`
+                            )}
                         </motion.button>
                     </form>
                 </motion.div>
