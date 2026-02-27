@@ -88,17 +88,19 @@ export const fetchPayments = async (username) => {
 export const updateUser = async (data, oldusername) => {
     await connectDB();
     let ndata = Object.fromEntries(data);
-    console.log(ndata)
+
     
     // Encrypt razorpay credentials before saving
     if (ndata.razorpayId) ndata.razorpayId = encrypt(ndata.razorpayId);
     if (ndata.razorpaySecret) ndata.razorpaySecret = encrypt(ndata.razorpaySecret);
 
     if (ndata.username !== oldusername) {
-        let u = await User.findOne({ username: oldusername })
+        let u = await User.findOne({ username: ndata.username })
         if (u) {
             return { error: "Username already taken" }
         }
+        // Also update the username in all payments associated with this user
+        await Payment.updateMany({ to_user: oldusername }, { to_user: ndata.username })
     }
     await User.updateOne({ username: oldusername }, ndata)
 }

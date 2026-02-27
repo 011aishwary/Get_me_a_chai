@@ -8,7 +8,7 @@ import User from '../../models/User'
 
 export default async function Username({params}){
   const param = await params;
-  console.log(param)
+
   // if username is not valid then show 404 page
   const  checkuser = async ()=> {
     await connectDB();
