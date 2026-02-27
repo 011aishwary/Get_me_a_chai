@@ -16,11 +16,11 @@ export default async function Username({params}){
     if(!user){
       return notFound();
     }
-
-    
+    // Return a plain object to avoid passing Mongoose documents to Client Components
+    return JSON.parse(JSON.stringify(user));
   }
   
-  await checkuser();
+  const user = await checkuser();
   return (
     <>
       <Paymentpage username={param.username}/>
